@@ -5,6 +5,9 @@ import { useFonts } from "expo-font";
 import { useAssets } from "expo-asset";
 import { NavigationContainer } from "@react-navigation/native";
 import LoggedOutNav from "./navigators/LoggedOutNav";
+import { StatusBar } from "react-native";
+import { ThemeProvider } from "styled-components/native";
+import theme from "./styles/theme";
 
 const App = () => {
   const [loaded] = useFonts(Ionicons.font);
@@ -15,9 +18,16 @@ const App = () => {
   }
 
   return (
-    <NavigationContainer>
-      <LoggedOutNav />
-    </NavigationContainer>
+    <ThemeProvider theme={theme}>
+      <NavigationContainer>
+        <StatusBar
+          barStyle="light-content"
+          translucent
+          backgroundColor="transparent"
+        />
+        <LoggedOutNav />
+      </NavigationContainer>
+    </ThemeProvider>
   );
 };
 
