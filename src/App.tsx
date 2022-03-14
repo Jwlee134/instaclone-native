@@ -1,9 +1,10 @@
 import AppLoading from "expo-app-loading";
 import React from "react";
-import { SafeAreaView, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import { useAssets } from "expo-asset";
+import { NavigationContainer } from "@react-navigation/native";
+import LoggedOutNav from "./navigators/LoggedOutNav";
 
 const App = () => {
   const [loaded] = useFonts(Ionicons.font);
@@ -14,9 +15,9 @@ const App = () => {
   }
 
   return (
-    <SafeAreaView>
-      <Text>Haha</Text>
-    </SafeAreaView>
+    <NavigationContainer>
+      <LoggedOutNav />
+    </NavigationContainer>
   );
 };
 
