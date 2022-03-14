@@ -1,7 +1,8 @@
 import React, { ReactNode } from "react";
+import { Keyboard, Platform, TouchableWithoutFeedback } from "react-native";
 import styled from "styled-components/native";
 
-const Container = styled.View`
+const Container = styled.KeyboardAvoidingView`
   flex: 1;
   background-color: black;
   align-items: center;
@@ -18,10 +19,15 @@ const Logo = styled.Image`
 
 const AuthLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <Container>
-      <Logo resizeMode="contain" source={require("../../../assets/logo.png")} />
-      {children}
-    </Container>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <Container behavior={Platform.OS === "android" ? undefined : "padding"}>
+        <Logo
+          resizeMode="contain"
+          source={require("../../../assets/logo.png")}
+        />
+        {children}
+      </Container>
+    </TouchableWithoutFeedback>
   );
 };
 
