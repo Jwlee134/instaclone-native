@@ -50,6 +50,7 @@ const CreateAccount = () => {
         returnKeyType="done"
         placeholder="Password"
         secureTextEntry
+        last
       />
       <AuthButton text="Create Account" disabled />
     </AuthLayout>

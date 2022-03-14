@@ -7,7 +7,7 @@ const Container = styled.KeyboardAvoidingView`
   background-color: black;
   align-items: center;
   justify-content: center;
-  padding: 0 40px;
+  padding: 0 20px;
 `;
 
 const Logo = styled.Image`

@@ -4,7 +4,7 @@ import styled from "styled-components/native";
 
 const Button = styled.TouchableOpacity<{ disabled?: boolean }>`
   background-color: ${({ theme }) => theme.blue};
-  padding: 13px 10px;
+  padding: 15px 10px;
   border-radius: 5px;
   width: 100%;
   opacity: ${({ disabled }) => (disabled ? "0.5" : "1")};
