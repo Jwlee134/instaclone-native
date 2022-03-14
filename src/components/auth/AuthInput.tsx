@@ -1,5 +1,5 @@
-import React from "react";
-import { TextInputProps } from "react-native";
+import React, { ForwardedRef, forwardRef } from "react";
+import { TextInput, TextInputProps } from "react-native";
 import styled from "styled-components/native";
 
 const Input = styled.TextInput`
@@ -11,8 +11,10 @@ const Input = styled.TextInput`
 
 interface Props extends TextInputProps {}
 
-const AuthInput = ({ ...props }: Props) => {
-  return <Input placeholderTextColor="gray" {...props} />;
-};
+const AuthInput = forwardRef(
+  ({ ...props }: Props, ref: ForwardedRef<TextInput>) => {
+    return <Input ref={ref} placeholderTextColor="gray" {...props} />;
+  },
+);
 
 export default AuthInput;
