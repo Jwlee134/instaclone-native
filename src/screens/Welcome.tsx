@@ -1,10 +1,11 @@
 import React from "react";
 import { Text, View } from "react-native";
+import { WelcomeScreenProps } from "../types/navigators";
 
-const Welcome = () => {
+const Welcome = ({ navigation }: WelcomeScreenProps) => {
   return (
     <View>
-      <Text>Welcome</Text>
+      <Text onPress={() => navigation.navigate("Login")}>Welcome</Text>
     </View>
   );
 };
