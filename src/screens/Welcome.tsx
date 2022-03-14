@@ -8,6 +8,7 @@ const Container = styled.View`
   background-color: black;
   align-items: center;
   justify-content: center;
+  padding: 0 40px;
 `;
 
 const Logo = styled.Image`
@@ -15,22 +16,26 @@ const Logo = styled.Image`
   height: 100px;
 `;
 
-const CreateAccount = styled.View`
+const CreateAccount = styled.TouchableOpacity<{ disabled?: boolean }>`
   background-color: ${({ theme }) => theme.blue};
-  padding: 7px 10px;
+  padding: 10px;
   border-radius: 5px;
+  width: 100%;
+  margin-top: 20px;
+  opacity: ${({ disabled }) => (disabled ? "0.5" : "1")};
 `;
 
 const CreateAccountText = styled.Text`
   color: white;
   font-weight: 600;
   font-size: 16px;
+  text-align: center;
 `;
 
 const LoginLink = styled.Text`
   color: ${({ theme }) => theme.blue};
   font-weight: 600;
-  margin-top: 10px;
+  margin-top: 20px;
 `;
 
 const Welcome = ({ navigation: { navigate } }: WelcomeScreenProps) => {
@@ -40,11 +45,9 @@ const Welcome = ({ navigation: { navigate } }: WelcomeScreenProps) => {
   return (
     <Container>
       <Logo resizeMode="contain" source={require("../../assets/logo.png")} />
-      <TouchableOpacity onPress={moveToCreateAccount}>
-        <CreateAccount>
-          <CreateAccountText>Create Account</CreateAccountText>
-        </CreateAccount>
-      </TouchableOpacity>
+      <CreateAccount disabled={false} onPress={moveToCreateAccount}>
+        <CreateAccountText>Create Account</CreateAccountText>
+      </CreateAccount>
       <TouchableOpacity onPress={moveToLogin}>
         <LoginLink>Log in</LoginLink>
       </TouchableOpacity>

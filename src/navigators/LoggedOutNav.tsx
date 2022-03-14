@@ -16,7 +16,16 @@ const LoggedOutNav = () => {
         component={Welcome}
       />
       <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="CreateAccount" component={CreateAccount} />
+      <Stack.Screen
+        options={{
+          headerTitle: "",
+          headerBackTitle: "",
+          headerTransparent: true,
+          headerTintColor: "white",
+        }}
+        name="CreateAccount"
+        component={CreateAccount}
+      />
     </Stack.Navigator>
   );
 };
