@@ -1,5 +1,5 @@
 import AppLoading from "expo-app-loading";
-import React from "react";
+import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import { useAssets } from "expo-asset";

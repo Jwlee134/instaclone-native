@@ -14,9 +14,7 @@ interface Form {
 }
 
 const Login = ({
-  route: {
-    params: { username = "", password = "" },
-  },
+  route: { params: { username = "", password = "" } = {} },
 }: LoginScreenProps) => {
   const { control, handleSubmit, watch } = useForm<Form>({
     defaultValues: { username, password },
