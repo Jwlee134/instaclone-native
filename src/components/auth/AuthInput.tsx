@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef } from "react";
+import React, { forwardRef } from "react";
 import { TextInput, TextInputProps } from "react-native";
 import styled from "styled-components/native";
 
@@ -17,8 +17,8 @@ interface Props extends TextInputProps {
   last?: boolean;
 }
 
-const AuthInput = forwardRef(
-  ({ last = false, ...props }: Props, ref: ForwardedRef<TextInput>) => {
+const AuthInput = forwardRef<TextInput, Props>(
+  ({ last = false, ...props }, ref) => {
     return (
       <Input
         ref={ref}
