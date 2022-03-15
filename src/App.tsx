@@ -1,5 +1,5 @@
 import AppLoading from "expo-app-loading";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import { useAssets } from "expo-asset";
@@ -9,15 +9,28 @@ import { StatusBar } from "react-native";
 import { ThemeProvider } from "styled-components/native";
 import theme from "./styles/theme";
 import { ApolloProvider, useReactiveVar } from "@apollo/client";
-import client, { isLoggedInVar } from "./apollo";
+import client, { isLoggedInVar, TOKEN, tokenVar } from "./apollo";
 import LoggedInNav from "./navigators/LoggedInNav";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const App = () => {
+  const [isReady, setIsReady] = useState(false);
   const [loaded] = useFonts(Ionicons.font);
   const [assets] = useAssets([require("../assets/logo.png")]);
   const isLoggedIn = useReactiveVar(isLoggedInVar);
 
-  if (!loaded || !assets) {
+  useEffect(() => {
+    (async () => {
+      const token = await AsyncStorage.getItem(TOKEN);
+      if (token) {
+        isLoggedInVar(true);
+        tokenVar(token);
+      }
+      setIsReady(true);
+    })();
+  }, []);
+
+  if (!loaded || !assets || !isReady) {
     return <AppLoading />;
   }
 
