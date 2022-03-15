@@ -5,6 +5,7 @@ module.exports = {
   plugins: ["@typescript-eslint"],
   rules: {
     quotes: ["error", "double"],
+    curly: "off",
   },
   overrides: [
     {

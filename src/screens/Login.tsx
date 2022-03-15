@@ -1,9 +1,11 @@
 import React, { useRef } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { TextInput } from "react-native";
+import { logUserIn } from "../apollo";
 import AuthButton from "../components/auth/AuthButton";
 import AuthInput from "../components/auth/AuthInput";
 import AuthLayout from "../components/auth/AuthLayout";
+import { useLoginMutation } from "../graphql/generated";
 
 interface Form {
   username: string;
@@ -11,13 +13,21 @@ interface Form {
 }
 
 const Login = () => {
-  const { control, handleSubmit } = useForm<Form>();
+  const { control, handleSubmit, watch } = useForm<Form>();
   const passwordRef = useRef<TextInput>(null);
+  const [loginMutation, { loading }] = useLoginMutation();
 
   const onNext = () => passwordRef.current?.focus();
 
   const onValid: SubmitHandler<Form> = data => {
-    console.log(data);
+    if (loading) return;
+    loginMutation({
+      variables: data,
+      onCompleted: ({ login }) => {
+        if (!login?.isSuccess || !login.token) return;
+        logUserIn(login.token);
+      },
+    });
   };
 
   return (
@@ -57,7 +67,12 @@ const Login = () => {
           />
         )}
       />
-      <AuthButton text="Log in" onPress={handleSubmit(onValid)} />
+      <AuthButton
+        text="Log in"
+        isLoading={loading}
+        onPress={handleSubmit(onValid)}
+        disabled={!watch("username") || !watch("password")}
+      />
     </AuthLayout>
   );
 };
