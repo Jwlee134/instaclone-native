@@ -6,14 +6,21 @@ import AuthButton from "../components/auth/AuthButton";
 import AuthInput from "../components/auth/AuthInput";
 import AuthLayout from "../components/auth/AuthLayout";
 import { useLoginMutation } from "../graphql/generated";
+import { LoginScreenProps } from "../types/navigators";
 
 interface Form {
   username: string;
   password: string;
 }
 
-const Login = () => {
-  const { control, handleSubmit, watch } = useForm<Form>();
+const Login = ({
+  route: {
+    params: { username = "", password = "" },
+  },
+}: LoginScreenProps) => {
+  const { control, handleSubmit, watch } = useForm<Form>({
+    defaultValues: { username, password },
+  });
   const passwordRef = useRef<TextInput>(null);
   const [loginMutation, { loading }] = useLoginMutation();
 

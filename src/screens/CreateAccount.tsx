@@ -4,6 +4,8 @@ import { TextInput } from "react-native";
 import AuthButton from "../components/auth/AuthButton";
 import AuthInput from "../components/auth/AuthInput";
 import AuthLayout from "../components/auth/AuthLayout";
+import { useCreateAccountMutation } from "../graphql/generated";
+import { CreateAccountScreenProps } from "../types/navigators";
 
 interface Form {
   firstName: string;
@@ -13,8 +15,11 @@ interface Form {
   password: string;
 }
 
-const CreateAccount = () => {
-  const { control, handleSubmit } = useForm<Form>();
+const CreateAccount = ({
+  navigation: { navigate },
+}: CreateAccountScreenProps) => {
+  const { control, handleSubmit, getValues } = useForm<Form>();
+  const [createAccountMutation, { loading }] = useCreateAccountMutation();
 
   const lastNameRef = useRef<TextInput>(null);
   const usernameRef = useRef<TextInput>(null);
@@ -24,7 +29,15 @@ const CreateAccount = () => {
   const onNext = (ref: React.RefObject<TextInput>) => ref.current?.focus();
 
   const onValid: SubmitHandler<Form> = data => {
-    console.log(data);
+    if (loading) return;
+    createAccountMutation({
+      variables: data,
+      onCompleted: ({ createAccount }) => {
+        if (!createAccount?.isSuccess) return;
+        const { username, password } = getValues();
+        navigate("Login", { username, password });
+      },
+    });
   };
 
   return (
@@ -116,7 +129,11 @@ const CreateAccount = () => {
           />
         )}
       />
-      <AuthButton text="Create Account" onPress={handleSubmit(onValid)} />
+      <AuthButton
+        text="Create Account"
+        isLoading={loading}
+        onPress={handleSubmit(onValid)}
+      />
     </AuthLayout>
   );
 };

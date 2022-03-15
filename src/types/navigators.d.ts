@@ -2,7 +2,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 export type LoggedOutStackNavParamList = {
   Welcome: undefined;
-  Login: undefined;
+  Login: { username?: string; password?: string };
   CreateAccount: undefined;
 };
 
