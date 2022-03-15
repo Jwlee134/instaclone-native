@@ -8,6 +8,8 @@ import LoggedOutNav from "./navigators/LoggedOutNav";
 import { StatusBar } from "react-native";
 import { ThemeProvider } from "styled-components/native";
 import theme from "./styles/theme";
+import { ApolloProvider } from "@apollo/client";
+import client from "./apollo";
 
 const App = () => {
   const [loaded] = useFonts(Ionicons.font);
@@ -18,16 +20,18 @@ const App = () => {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <NavigationContainer>
-        <StatusBar
-          barStyle="light-content"
-          translucent
-          backgroundColor="transparent"
-        />
-        <LoggedOutNav />
-      </NavigationContainer>
-    </ThemeProvider>
+    <ApolloProvider client={client}>
+      <ThemeProvider theme={theme}>
+        <NavigationContainer>
+          <StatusBar
+            barStyle="light-content"
+            translucent
+            backgroundColor="transparent"
+          />
+          <LoggedOutNav />
+        </NavigationContainer>
+      </ThemeProvider>
+    </ApolloProvider>
   );
 };
 

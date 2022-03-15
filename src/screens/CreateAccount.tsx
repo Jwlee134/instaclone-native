@@ -32,6 +32,7 @@ const CreateAccount = () => {
       <Controller
         control={control}
         name="firstName"
+        rules={{ required: true }}
         render={({ field: { onChange, onBlur, value } }) => (
           <AuthInput
             onSubmitEditing={() => onNext(lastNameRef)}
@@ -61,10 +62,10 @@ const CreateAccount = () => {
           />
         )}
       />
-
       <Controller
         control={control}
         name="username"
+        rules={{ required: true }}
         render={({ field: { onChange, onBlur, value } }) => (
           <AuthInput
             ref={usernameRef}
@@ -79,10 +80,10 @@ const CreateAccount = () => {
           />
         )}
       />
-
       <Controller
         control={control}
         name="email"
+        rules={{ required: true }}
         render={({ field: { onChange, onBlur, value } }) => (
           <AuthInput
             ref={emailRef}
@@ -97,10 +98,10 @@ const CreateAccount = () => {
           />
         )}
       />
-
       <Controller
         control={control}
         name="password"
+        rules={{ required: true }}
         render={({ field: { onChange, onBlur, value } }) => (
           <AuthInput
             ref={passwordRef}
@@ -115,7 +116,6 @@ const CreateAccount = () => {
           />
         )}
       />
-
       <AuthButton text="Create Account" onPress={handleSubmit(onValid)} />
     </AuthLayout>
   );

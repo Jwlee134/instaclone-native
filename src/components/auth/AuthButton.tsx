@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableOpacityProps } from "react-native";
+import { ActivityIndicator, TouchableOpacityProps } from "react-native";
 import styled from "styled-components/native";
 
 const Button = styled.TouchableOpacity<{ disabled?: boolean }>`
@@ -19,12 +19,17 @@ const ButtonText = styled.Text`
 
 interface Props extends TouchableOpacityProps {
   text: string;
+  isLoading?: boolean;
 }
 
-const AuthButton = ({ text, ...props }: Props) => {
+const AuthButton = ({ text, isLoading, ...props }: Props) => {
   return (
     <Button {...props}>
-      <ButtonText>{text}</ButtonText>
+      {isLoading ? (
+        <ActivityIndicator color="white" />
+      ) : (
+        <ButtonText>{text}</ButtonText>
+      )}
     </Button>
   );
 };
