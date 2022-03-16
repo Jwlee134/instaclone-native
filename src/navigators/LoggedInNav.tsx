@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
+import { View } from "react-native";
 import Feed from "../screens/Feed";
 import Notification from "../screens/Notification";
 import Profile from "../screens/Profile";
@@ -28,7 +29,7 @@ const LoggedInNav = () => {
             <Ionicons
               name={focused ? "home" : "home-outline"}
               color={color}
-              size={24}
+              size={22}
             />
           ),
         }}
@@ -41,7 +42,20 @@ const LoggedInNav = () => {
             <Ionicons
               name={focused ? "search" : "search-outline"}
               color={color}
-              size={24}
+              size={22}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Camera"
+        component={View}
+        options={{
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? "camera" : "camera-outline"}
+              color={color}
+              size={22}
             />
           ),
         }}
@@ -54,7 +68,7 @@ const LoggedInNav = () => {
             <Ionicons
               name={focused ? "heart" : "heart-outline"}
               color={color}
-              size={24}
+              size={22}
             />
           ),
         }}
@@ -67,7 +81,7 @@ const LoggedInNav = () => {
             <Ionicons
               name={focused ? "person" : "person-outline"}
               color={color}
-              size={24}
+              size={22}
             />
           ),
         }}
