@@ -2,10 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
 import { View } from "react-native";
-import Feed from "../screens/Feed";
-import Notification from "../screens/Notification";
-import Profile from "../screens/Profile";
-import Search from "../screens/Search";
+import SharedNav from "./SharedNav";
 
 const Tab = createBottomTabNavigator();
 
@@ -22,8 +19,7 @@ const LoggedInNav = () => {
         tabBarActiveTintColor: "white",
       }}>
       <Tab.Screen
-        name="Feed"
-        component={Feed}
+        name="FeedTab"
         options={{
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
@@ -32,11 +28,11 @@ const LoggedInNav = () => {
               size={22}
             />
           ),
-        }}
-      />
+        }}>
+        {() => <SharedNav name="Feed" />}
+      </Tab.Screen>
       <Tab.Screen
-        name="Search"
-        component={Search}
+        name="SearchTab"
         options={{
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
@@ -45,10 +41,11 @@ const LoggedInNav = () => {
               size={22}
             />
           ),
-        }}
-      />
+        }}>
+        {() => <SharedNav name="Search" />}
+      </Tab.Screen>
       <Tab.Screen
-        name="Camera"
+        name="CameraTab"
         component={View}
         options={{
           tabBarIcon: ({ color, focused }) => (
@@ -61,8 +58,7 @@ const LoggedInNav = () => {
         }}
       />
       <Tab.Screen
-        name="Notification"
-        component={Notification}
+        name="NotificationTab"
         options={{
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
@@ -71,11 +67,11 @@ const LoggedInNav = () => {
               size={22}
             />
           ),
-        }}
-      />
+        }}>
+        {() => <SharedNav name="Notification" />}
+      </Tab.Screen>
       <Tab.Screen
-        name="Profile"
-        component={Profile}
+        name="ProfileTab"
         options={{
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
@@ -84,8 +80,9 @@ const LoggedInNav = () => {
               size={22}
             />
           ),
-        }}
-      />
+        }}>
+        {() => <SharedNav name="Me" />}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 };
