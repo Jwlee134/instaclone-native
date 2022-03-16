@@ -19,7 +19,7 @@ export const logUserIn = async (token: string) => {
 export const tokenVar = makeVar("");
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:4000/graphql",
+  uri: "http://192.168.0.6:4000/graphql",
 });
 
 const authLink = setContext((_, { headers }) => ({

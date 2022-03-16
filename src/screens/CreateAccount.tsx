@@ -105,6 +105,7 @@ const CreateAccount = ({
             returnKeyType="next"
             placeholder="Email"
             keyboardType="email-address"
+            autoCapitalize="none"
             onChangeText={onChange}
             onBlur={onBlur}
             value={value}

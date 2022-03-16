@@ -4,7 +4,6 @@ import styled from "styled-components/native";
 
 const Container = styled.KeyboardAvoidingView`
   flex: 1;
-  background-color: black;
   align-items: center;
   justify-content: center;
   padding: 0 20px;
@@ -21,10 +20,7 @@ const AuthLayout = ({ children }: { children: ReactNode }) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <Container behavior={Platform.OS === "android" ? undefined : "padding"}>
-        <Logo
-          resizeMode="contain"
-          source={require("../../../assets/logo.png")}
-        />
+        <Logo resizeMode="contain" source={require("../../assets/logo.png")} />
         {children}
       </Container>
     </TouchableWithoutFeedback>

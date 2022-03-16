@@ -1,7 +1,14 @@
+import { DefaultTheme as NavigationDefaultTheme } from "@react-navigation/native";
 import { DefaultTheme } from "styled-components";
 
-const theme: DefaultTheme = {
+export const theme: DefaultTheme = {
   blue: "#0095f6",
 };
 
-export default theme;
+export const navigationTheme = {
+  ...NavigationDefaultTheme,
+  colors: {
+    ...NavigationDefaultTheme.colors,
+    background: "black",
+  },
+};
