@@ -15,7 +15,12 @@ const Stack = createNativeStackNavigator();
 
 const SharedNav = ({ name }: Props) => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerBackTitleVisible: false,
+        headerStyle: { backgroundColor: "black" },
+        headerTintColor: "white",
+      }}>
       {name === "Feed" && <Stack.Screen name="Feed" component={Feed} />}
       {name === "Search" && <Stack.Screen name="Search" component={Search} />}
       {name === "Notification" && (
