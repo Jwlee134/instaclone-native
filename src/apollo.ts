@@ -8,6 +8,8 @@ import { setContext } from "@apollo/client/link/context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const TOKEN = "token";
+export const DEFAULT_AVATAR =
+  "https://instaclone-jw.s3.ap-northeast-2.amazonaws.com/avatars/1646290008674-Jwlee134-avatar.jpeg";
 
 export const isLoggedInVar = makeVar(false);
 export const logUserIn = async (token: string) => {

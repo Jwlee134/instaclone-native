@@ -1,28 +1,19 @@
 import React from "react";
-import { FlatList, Image, Text, useWindowDimensions, View } from "react-native";
+import { FlatList } from "react-native";
+import Photo from "../components/Photo";
 import ScreenLayout from "../components/ScreenLayout";
 import { useSeeFeedQuery } from "../graphql/generated";
 
 const Feed = () => {
   const { data: { seeFeed } = {}, loading } = useSeeFeedQuery({});
-  const width = useWindowDimensions().width;
 
   return (
     <ScreenLayout loading={loading}>
       <FlatList
         data={seeFeed || []}
-        renderItem={({ item }) => (
-          <View>
-            <Image
-              style={{ width, height: width }}
-              source={{ uri: item?.file }}
-            />
-            <Text style={{ color: "white" }}>
-              {item?.caption || "gagagagasdfhjewhfnudsn"}
-            </Text>
-          </View>
-        )}
+        renderItem={({ item }) => <Photo item={item} />}
         keyExtractor={item => item?.id + ""}
+        showsVerticalScrollIndicator={false}
       />
     </ScreenLayout>
   );
