@@ -1,14 +1,30 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { FlatList, Image, Text, useWindowDimensions, View } from "react-native";
+import ScreenLayout from "../components/ScreenLayout";
 import { useSeeFeedQuery } from "../graphql/generated";
 
 const Feed = () => {
-  const { data: { seeFeed } = {} } = useSeeFeedQuery();
+  const { data: { seeFeed } = {}, loading } = useSeeFeedQuery({});
+  const width = useWindowDimensions().width;
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text style={{ color: "white" }}>Feed</Text>
-    </View>
+    <ScreenLayout loading={loading}>
+      <FlatList
+        data={seeFeed || []}
+        renderItem={({ item }) => (
+          <View>
+            <Image
+              style={{ width, height: width }}
+              source={{ uri: item?.file }}
+            />
+            <Text style={{ color: "white" }}>
+              {item?.caption || "gagagagasdfhjewhfnudsn"}
+            </Text>
+          </View>
+        )}
+        keyExtractor={item => item?.id + ""}
+      />
+    </ScreenLayout>
   );
 };
 
