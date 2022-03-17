@@ -36,6 +36,8 @@ export type SharedStackNavParamList = {
   Me: undefined;
   Profile: { username: string };
   Photo: undefined;
+  Likes: { id: number };
+  Comments: { id: number };
 };
 
 export type FeedScreenProps = CompositeScreenProps<
@@ -44,5 +46,13 @@ export type FeedScreenProps = CompositeScreenProps<
 >;
 export type ProfileScreenProps = CompositeScreenProps<
   NativeStackScreenProps<SharedStackNavParamList, "Profile">,
+  BottomTabScreenProps<LoggedInBottomTabNavParamList>
+>;
+export type LikesScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<SharedStackNavParamList, "Likes">,
+  BottomTabScreenProps<LoggedInBottomTabNavParamList>
+>;
+export type CommentsScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<SharedStackNavParamList, "Comments">,
   BottomTabScreenProps<LoggedInBottomTabNavParamList>
 >;

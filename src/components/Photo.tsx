@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { Image, TouchableOpacity, useWindowDimensions } from "react-native";
@@ -18,28 +19,43 @@ const UserAvatar = styled.Image`
   width: 30px;
   height: 30px;
   border-radius: 25px;
+  margin-right: 10px;
 `;
 
 const Username = styled.Text`
   color: white;
-  margin-left: 10px;
+
   font-weight: 600;
 `;
 
 const File = styled.Image``;
 
-const ActionContainer = styled.View``;
+const BelowFileContainer = styled.View`
+  padding: 10px 10px 0 10px;
+`;
 
-const Action = styled.TouchableOpacity``;
+const ActionContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
+const Action = styled.TouchableOpacity`
+  margin-right: 10px;
+`;
 
 const NumOfLikes = styled.Text`
   color: white;
+  margin: 7px 0;
+  font-weight: 500;
 `;
 
-const CaptionContainer = styled.View``;
+const CaptionContainer = styled.View`
+  flex-direction: row;
+`;
 
 const CaptionText = styled.Text`
   color: white;
+  margin-left: 5px;
 `;
 
 type ArrayElement<ArrayType extends readonly unknown[] | null | undefined> =
@@ -63,6 +79,11 @@ const Photo = ({ item }: Props) => {
   const moveToProfile = () =>
     navigation.navigate("Profile", { username: item?.owner?.username! });
 
+  const MoveToLikes = () => navigation.navigate("Likes", { id: item?.id! });
+
+  const MoveToComments = () =>
+    navigation.navigate("Comments", { id: item?.id! });
+
   return (
     <Container>
       <Header onPress={moveToProfile}>
@@ -76,21 +97,31 @@ const Photo = ({ item }: Props) => {
         source={{ uri: item?.file }}
         style={{ width, height: height || width }}
       />
-      <ActionContainer>
-        <Action onPress={() => {}}></Action>
-        <Action onPress={() => {}}></Action>
-      </ActionContainer>
-      <Action>
-        <NumOfLikes>
-          {item?.likes === 1 ? "1 like" : `${item?.likes} likes`}
-        </NumOfLikes>
-      </Action>
-      <CaptionContainer>
-        <TouchableOpacity onPress={moveToProfile}>
-          <Username>{item?.owner?.username}</Username>
-        </TouchableOpacity>
-        <CaptionText>{item?.caption}</CaptionText>
-      </CaptionContainer>
+      <BelowFileContainer>
+        <ActionContainer>
+          <Action onPress={() => {}}>
+            <Ionicons
+              name={item?.isLiked ? "heart" : "heart-outline"}
+              color={item?.isLiked ? "tomato" : "white"}
+              size={22}
+            />
+          </Action>
+          <Action onPress={MoveToComments}>
+            <Ionicons name="chatbubble-outline" color="white" size={20} />
+          </Action>
+        </ActionContainer>
+        <Action onPress={MoveToLikes}>
+          <NumOfLikes>
+            {item?.likes === 1 ? "1 like" : `${item?.likes} likes`}
+          </NumOfLikes>
+        </Action>
+        <CaptionContainer>
+          <TouchableOpacity onPress={moveToProfile}>
+            <Username>{item?.owner?.username}</Username>
+          </TouchableOpacity>
+          <CaptionText>{item?.caption}</CaptionText>
+        </CaptionContainer>
+      </BelowFileContainer>
     </Container>
   );
 };
