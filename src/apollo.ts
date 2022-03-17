@@ -15,6 +15,11 @@ export const logUserIn = async (token: string) => {
   isLoggedInVar(true);
   tokenVar(token);
 };
+export const logUserOut = async () => {
+  await AsyncStorage.removeItem(TOKEN);
+  isLoggedInVar(false);
+  tokenVar("");
+};
 
 export const tokenVar = makeVar("");
 
@@ -23,7 +28,7 @@ const httpLink = createHttpLink({
 });
 
 const authLink = setContext((_, { headers }) => ({
-  headers: { ...headers, token: tokenVar },
+  headers: { ...headers, token: tokenVar() },
 }));
 
 const client = new ApolloClient({

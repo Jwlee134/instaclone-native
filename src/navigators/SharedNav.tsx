@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
+import { Image } from "react-native";
 import Feed from "../screens/Feed";
 import Me from "../screens/Me";
 import Notification from "../screens/Notification";
@@ -21,7 +22,21 @@ const SharedNav = ({ name }: Props) => {
         headerStyle: { backgroundColor: "black" },
         headerTintColor: "white",
       }}>
-      {name === "Feed" && <Stack.Screen name="Feed" component={Feed} />}
+      {name === "Feed" && (
+        <Stack.Screen
+          options={{
+            headerTitle: () => (
+              <Image
+                style={{ width: 100, height: 40 }}
+                resizeMode="contain"
+                source={require("../assets/logo.png")}
+              />
+            ),
+          }}
+          name="Feed"
+          component={Feed}
+        />
+      )}
       {name === "Search" && <Stack.Screen name="Search" component={Search} />}
       {name === "Notification" && (
         <Stack.Screen name="Notification" component={Notification} />

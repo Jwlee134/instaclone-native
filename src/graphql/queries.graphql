@@ -1,0 +1,16 @@
+query seeFeed {
+  seeFeed {
+    ...PhotoFragment
+    owner {
+      username
+      avatar
+    }
+    caption
+    comments {
+      ...CommentFragment
+    }
+    createdAt
+    isMine
+    isLiked
+  }
+}
