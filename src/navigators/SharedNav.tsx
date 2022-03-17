@@ -7,12 +7,13 @@ import Notification from "../screens/Notification";
 import Photo from "../screens/Photo";
 import Profile from "../screens/Profile";
 import Search from "../screens/Search";
+import { SharedStackNavParamList } from "../types/navigators";
 
 interface Props {
   name: "Feed" | "Search" | "Notification" | "Me";
 }
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<SharedStackNavParamList>();
 
 const SharedNav = ({ name }: Props) => {
   return (

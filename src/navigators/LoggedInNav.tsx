@@ -2,9 +2,10 @@ import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
 import { View } from "react-native";
+import { LoggedInBottomTabNavParamList } from "../types/navigators";
 import SharedNav from "./SharedNav";
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<LoggedInBottomTabNavParamList>();
 
 const LoggedInNav = () => {
   return (
@@ -71,7 +72,7 @@ const LoggedInNav = () => {
         {() => <SharedNav name="Notification" />}
       </Tab.Screen>
       <Tab.Screen
-        name="ProfileTab"
+        name="MeTab"
         options={{
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
