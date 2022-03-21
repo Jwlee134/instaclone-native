@@ -12,7 +12,8 @@ const Feed = () => {
     fetchMore,
   } = useSeeFeedQuery();
 
-  const onEndReached = () => fetchMore({ variables: { lastId: 3 } });
+  const onEndReached = () =>
+    fetchMore({ variables: { lastId: seeFeed?.[seeFeed.length - 1]?.id } });
 
   return (
     <ScreenLayout loading={loading}>
@@ -31,7 +32,6 @@ const Feed = () => {
           />
         }
         onEndReached={onEndReached}
-        onEndReachedThreshold={0}
       />
     </ScreenLayout>
   );

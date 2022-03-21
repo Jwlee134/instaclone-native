@@ -1,5 +1,5 @@
-query seeFeed {
-  seeFeed {
+query seeFeed($lastId: Int) {
+  seeFeed(lastId: $lastId) {
     ...PhotoFragment
     owner {
       username
