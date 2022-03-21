@@ -56,3 +56,7 @@ export type CommentsScreenProps = CompositeScreenProps<
   NativeStackScreenProps<SharedStackNavParamList, "Comments">,
   BottomTabScreenProps<LoggedInBottomTabNavParamList>
 >;
+export type MeScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<SharedStackNavParamList, "Me">,
+  BottomTabScreenProps<LoggedInBottomTabNavParamList>
+>;

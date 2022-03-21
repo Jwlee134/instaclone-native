@@ -20,3 +20,12 @@ query seeLikes($seePhotoLikesId: Int!) {
     ...UserFragment
   }
 }
+
+query me {
+  me {
+    avatar
+    username
+    totalFollowers
+    totalFollowing
+  }
+}
