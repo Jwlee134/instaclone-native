@@ -5,7 +5,14 @@ import ScreenLayout from "../components/ScreenLayout";
 import { useSeeFeedQuery } from "../graphql/generated";
 
 const Feed = () => {
-  const { data: { seeFeed } = {}, loading, refetch } = useSeeFeedQuery({});
+  const {
+    data: { seeFeed } = {},
+    loading,
+    refetch,
+    fetchMore,
+  } = useSeeFeedQuery();
+
+  const onEndReached = () => fetchMore({ variables: { lastId: 3 } });
 
   return (
     <ScreenLayout loading={loading}>
@@ -23,6 +30,8 @@ const Feed = () => {
             progressBackgroundColor="black"
           />
         }
+        onEndReached={onEndReached}
+        onEndReachedThreshold={0}
       />
     </ScreenLayout>
   );
