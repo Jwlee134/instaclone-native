@@ -9,9 +9,10 @@ import { StatusBar } from "react-native";
 import { ThemeProvider } from "styled-components/native";
 import { theme, navigationTheme } from "./styles/theme";
 import { ApolloProvider, useReactiveVar } from "@apollo/client";
-import client, { isLoggedInVar, TOKEN, tokenVar } from "./apollo";
+import client, { cache, isLoggedInVar, TOKEN, tokenVar } from "./apollo";
 import LoggedInNav from "./navigators/LoggedInNav";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AsyncStorageWrapper, persistCache } from "apollo3-cache-persist";
 
 const App = () => {
   const [isReady, setIsReady] = useState(false);
@@ -26,6 +27,10 @@ const App = () => {
         isLoggedInVar(true);
         tokenVar(token);
       }
+      await persistCache({
+        cache,
+        storage: new AsyncStorageWrapper(AsyncStorage),
+      });
       setIsReady(true);
     })();
   }, []);

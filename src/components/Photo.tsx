@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Image, TouchableOpacity, useWindowDimensions } from "react-native";
 import styled from "styled-components/native";
 import { DEFAULT_AVATAR } from "../apollo";
-import { SeeFeedQuery } from "../graphql/generated";
+import { SeeFeedQuery, useToggleLikeMutation } from "../graphql/generated";
 import { FeedScreenProps } from "../types/navigators";
 
 const Container = styled.View``;
@@ -69,6 +69,21 @@ const Photo = ({ item }: Props) => {
   const { width } = useWindowDimensions();
   const [height, setHeight] = useState(0);
 
+  const [toggleLike] = useToggleLikeMutation({
+    variables: { toggleLikeId: item?.id! },
+    update: (cache, { data }) => {
+      if (!item || !data?.toggleLike.isSuccess) return;
+      const id = `Photo:${item.id}`;
+      cache.modify({
+        id,
+        fields: {
+          isLiked: prev => !prev,
+          likes: prev => (!item.isLiked ? prev + 1 : prev - 1),
+        },
+      });
+    },
+  });
+
   useEffect(() => {
     if (!item) return;
     Image.getSize(item.file, (OWidth, OHeight) => {
@@ -99,7 +114,7 @@ const Photo = ({ item }: Props) => {
       />
       <BelowFileContainer>
         <ActionContainer>
-          <Action onPress={() => {}}>
+          <Action onPress={() => toggleLike()}>
             <Ionicons
               name={item?.isLiked ? "heart" : "heart-outline"}
               color={item?.isLiked ? "tomato" : "white"}

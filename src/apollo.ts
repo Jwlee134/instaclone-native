@@ -33,22 +33,24 @@ const authLink = setContext((_, { headers }) => ({
   headers: { ...headers, token: tokenVar() },
 }));
 
-const client = new ApolloClient({
-  link: authLink.concat(httpLink),
-  cache: new InMemoryCache({
-    // keyArgs false = seeFeed 쿼리에서 lastId 인자가 바뀜에 따라 쿼리가 다른 쿼리로 인식되는 걸 방지
-    // merge = 인자가 바뀜에 따라 같은 쿼리에 여러 데이터가 추가될 때 기존 캐시에 새로운 캐시를 추가하도록 설정
-    typePolicies: {
-      Query: {
-        fields: {
-          seeFeed: {
-            keyArgs: false,
-            merge: (existing = [], incoming = []) => [...existing, ...incoming],
-          },
+export const cache = new InMemoryCache({
+  // keyArgs false = seeFeed 쿼리에서 lastId 인자가 바뀜에 따라 쿼리가 다른 쿼리로 인식되는 걸 방지
+  // merge = 인자가 바뀜에 따라 같은 쿼리에 여러 데이터가 추가될 때 기존 캐시에 새로운 캐시를 추가하도록 설정
+  typePolicies: {
+    Query: {
+      fields: {
+        seeFeed: {
+          keyArgs: false,
+          merge: (existing = [], incoming = []) => [...existing, ...incoming],
         },
       },
     },
-  }),
+  },
+});
+
+const client = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache,
 });
 
 export default client;
