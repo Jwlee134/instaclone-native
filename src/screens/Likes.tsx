@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList, Text, View } from "react-native";
+import { FlatList } from "react-native";
 import RefreshControl from "../components/RefreshControl";
 import ScreenLayout from "../components/ScreenLayout";
 import UserRow from "../components/UserRow";

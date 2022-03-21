@@ -1,7 +1,13 @@
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import styled from "styled-components/native";
 import { DEFAULT_AVATAR } from "../apollo";
-import { UserFragmentFragment } from "../graphql/generated";
+import {
+  useFollowUserMutation,
+  UserFragmentFragment,
+  useUnfollowUserMutation,
+} from "../graphql/generated";
+import { LikesScreenProps } from "../types/navigators";
 
 const Container = styled.View`
   flex-direction: row;
@@ -22,15 +28,20 @@ const Username = styled.Text`
   font-weight: 600;
 `;
 
-const Column = styled.View`
+const Column = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
 `;
 
-const Button = styled.TouchableOpacity``;
+const Button = styled.TouchableOpacity`
+  background-color: ${({ theme }) => theme.blue};
+  padding: 5px 10px;
+  border-radius: 4px;
+`;
 
 const ButtonText = styled.Text`
   color: white;
+  font-weight: 600;
 `;
 
 interface Props {
@@ -38,11 +49,50 @@ interface Props {
 }
 
 const UserRow = ({ user }: Props) => {
-  const onPress = () => {};
+  const navigation = useNavigation<LikesScreenProps["navigation"]>();
+  const [follow] = useFollowUserMutation({
+    variables: { username: user?.username! },
+    update: (cache, { data }) => {
+      if (!data?.followUser.isSuccess) return;
+      cache.modify({
+        id: `User:${user?.id!}`,
+        fields: { totalFollowing: prev => prev + 1 },
+      });
+      cache.modify({
+        id: `User:${user?.id!}`,
+        fields: {
+          isFollowing: prev => !prev,
+          totalFollowers: prev => prev + 1,
+        },
+      });
+    },
+  });
+  const [unfollow] = useUnfollowUserMutation({
+    variables: { username: user?.username! },
+    update: (cache, { data }) => {
+      if (!data?.unfollowUser.isSuccess) return;
+      cache.modify({
+        id: `User:${user?.id!}`,
+        fields: { totalFollowing: prev => prev - 1 },
+      });
+      cache.modify({
+        id: `User:${user?.id!}`,
+        fields: {
+          isFollowing: prev => !prev,
+          totalFollowers: prev => prev - 1,
+        },
+      });
+    },
+  });
+
+  const onPress = () => (user?.isFollowing ? unfollow() : follow());
 
   return (
     <Container>
-      <Column>
+      <Column
+        onPress={() =>
+          navigation.navigate("Profile", { username: user?.username! })
+        }>
         <Avatar source={{ uri: user?.avatar || DEFAULT_AVATAR }} />
         <Username>{user?.username}</Username>
       </Column>
