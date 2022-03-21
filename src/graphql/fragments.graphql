@@ -15,3 +15,11 @@ fragment CommentFragment on Comment {
     avatar
   }
 }
+
+fragment UserFragment on User {
+  id
+  username
+  avatar
+  isFollowing
+  isMe
+}

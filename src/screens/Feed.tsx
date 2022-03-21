@@ -1,6 +1,7 @@
 import React from "react";
-import { FlatList, RefreshControl } from "react-native";
+import { FlatList } from "react-native";
 import Photo from "../components/Photo";
+import RefreshControl from "../components/RefreshControl";
 import ScreenLayout from "../components/ScreenLayout";
 import { useSeeFeedQuery } from "../graphql/generated";
 
@@ -23,13 +24,7 @@ const Feed = () => {
         keyExtractor={item => item?.id + ""}
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl
-            onRefresh={refetch}
-            refreshing={loading}
-            tintColor="white"
-            colors={["white"]}
-            progressBackgroundColor="black"
-          />
+          <RefreshControl onRefresh={refetch} refreshing={loading} />
         }
         onEndReached={onEndReached}
       />
