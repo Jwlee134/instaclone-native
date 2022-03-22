@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
-import { Keyboard, Platform, TouchableWithoutFeedback } from "react-native";
+import { Platform } from "react-native";
 import styled from "styled-components/native";
+import DismissKeyboard from "../DismissKeyboard";
 
 const Container = styled.KeyboardAvoidingView`
   flex: 1;
@@ -18,12 +19,12 @@ const Logo = styled.Image`
 
 const AuthLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <DismissKeyboard>
       <Container behavior={Platform.OS === "android" ? undefined : "padding"}>
         <Logo resizeMode="contain" source={require("../../assets/logo.png")} />
         {children}
       </Container>
-    </TouchableWithoutFeedback>
+    </DismissKeyboard>
   );
 };
 

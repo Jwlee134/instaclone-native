@@ -44,6 +44,10 @@ export type FeedScreenProps = CompositeScreenProps<
   NativeStackScreenProps<SharedStackNavParamList, "Feed">,
   BottomTabScreenProps<LoggedInBottomTabNavParamList>
 >;
+export type SearchScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<SharedStackNavParamList, "Search">,
+  BottomTabScreenProps<LoggedInBottomTabNavParamList>
+>;
 export type ProfileScreenProps = CompositeScreenProps<
   NativeStackScreenProps<SharedStackNavParamList, "Profile">,
   BottomTabScreenProps<LoggedInBottomTabNavParamList>
