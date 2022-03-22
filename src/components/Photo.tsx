@@ -4,7 +4,11 @@ import React, { useEffect, useState } from "react";
 import { Image, TouchableOpacity, useWindowDimensions } from "react-native";
 import styled from "styled-components/native";
 import { DEFAULT_AVATAR } from "../apollo";
-import { SeeFeedQuery, useToggleLikeMutation } from "../graphql/generated";
+import {
+  SeeFeedQuery,
+  SeePhotoQuery,
+  useToggleLikeMutation,
+} from "../graphql/generated";
 import { FeedScreenProps } from "../types/navigators";
 
 const Container = styled.View``;
@@ -61,7 +65,7 @@ const CaptionText = styled.Text`
 type ArrayElement<ArrayType extends readonly unknown[] | null | undefined> =
   ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
 interface Props {
-  item: ArrayElement<SeeFeedQuery["seeFeed"]>;
+  item: ArrayElement<SeeFeedQuery["seeFeed"]> | SeePhotoQuery["seePhoto"];
 }
 
 const Photo = ({ item }: Props) => {

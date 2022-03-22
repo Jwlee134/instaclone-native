@@ -110,7 +110,10 @@ const Search = ({ navigation }: SearchScreenProps) => {
             <FlatList
               data={data.searchPhotos}
               renderItem={({ item, index }) => (
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("Photo", { id: item?.id! })
+                  }>
                   <Image
                     style={{
                       width: width / 3 - 2 / 3,

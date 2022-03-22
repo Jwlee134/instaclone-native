@@ -1,11 +1,33 @@
 import React from "react";
-import { Text, View } from "react-native";
+import ScreenLayout from "../components/ScreenLayout";
+import { useSeePhotoQuery } from "../graphql/generated";
+import { PhotoScreenProps } from "../types/navigators";
+import PhotoComponent from "../components/Photo";
+import { ScrollView } from "react-native";
+import RefreshControl from "../components/RefreshControl";
 
-const Photo = () => {
+const Photo = ({
+  route: {
+    params: { id },
+  },
+}: PhotoScreenProps) => {
+  const {
+    data: { seePhoto } = {},
+    loading,
+    refetch,
+  } = useSeePhotoQuery({
+    variables: { seePhotoId: id },
+  });
+
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text style={{ color: "white" }}>Photo</Text>
-    </View>
+    <ScreenLayout loading={loading}>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={refetch} />
+        }>
+        <PhotoComponent item={seePhoto} />
+      </ScrollView>
+    </ScreenLayout>
   );
 };
 

@@ -2,6 +2,7 @@ query seeFeed($lastId: Int) {
   seeFeed(lastId: $lastId) {
     ...PhotoFragment
     owner {
+      id
       username
       avatar
     }
@@ -9,6 +10,21 @@ query seeFeed($lastId: Int) {
     comments {
       ...CommentFragment
     }
+    createdAt
+    isMine
+    isLiked
+  }
+}
+
+query seePhoto($seePhotoId: Int!) {
+  seePhoto(id: $seePhotoId) {
+    ...PhotoFragment
+    owner {
+      id
+      username
+      avatar
+    }
+    caption
     createdAt
     isMine
     isLiked

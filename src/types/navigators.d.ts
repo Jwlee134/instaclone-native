@@ -35,13 +35,17 @@ export type SharedStackNavParamList = {
   Notification: undefined;
   Me: undefined;
   Profile: { username: string };
-  Photo: undefined;
+  Photo: { id: number };
   Likes: { id: number };
   Comments: { id: number };
 };
 
 export type FeedScreenProps = CompositeScreenProps<
   NativeStackScreenProps<SharedStackNavParamList, "Feed">,
+  BottomTabScreenProps<LoggedInBottomTabNavParamList>
+>;
+export type PhotoScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<SharedStackNavParamList, "Photo">,
   BottomTabScreenProps<LoggedInBottomTabNavParamList>
 >;
 export type SearchScreenProps = CompositeScreenProps<
