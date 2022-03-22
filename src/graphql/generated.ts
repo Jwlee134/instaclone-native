@@ -410,6 +410,13 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', avatar?: string | null, username: string, totalFollowers: number, totalFollowing: number } | null };
 
+export type SearchPhotosQueryVariables = Exact<{
+  keyword: Scalars['String'];
+}>;
+
+
+export type SearchPhotosQuery = { __typename?: 'Query', searchPhotos?: Array<{ __typename?: 'Photo', id: number, file: string, createdAt: string } | null> | null };
+
 export const PhotoFragmentFragmentDoc = gql`
     fragment PhotoFragment on Photo {
   id
@@ -740,3 +747,40 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const SearchPhotosDocument = gql`
+    query searchPhotos($keyword: String!) {
+  searchPhotos(keyword: $keyword) {
+    id
+    file
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useSearchPhotosQuery__
+ *
+ * To run a query within a React component, call `useSearchPhotosQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchPhotosQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchPhotosQuery({
+ *   variables: {
+ *      keyword: // value for 'keyword'
+ *   },
+ * });
+ */
+export function useSearchPhotosQuery(baseOptions: Apollo.QueryHookOptions<SearchPhotosQuery, SearchPhotosQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchPhotosQuery, SearchPhotosQueryVariables>(SearchPhotosDocument, options);
+      }
+export function useSearchPhotosLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchPhotosQuery, SearchPhotosQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchPhotosQuery, SearchPhotosQueryVariables>(SearchPhotosDocument, options);
+        }
+export type SearchPhotosQueryHookResult = ReturnType<typeof useSearchPhotosQuery>;
+export type SearchPhotosLazyQueryHookResult = ReturnType<typeof useSearchPhotosLazyQuery>;
+export type SearchPhotosQueryResult = Apollo.QueryResult<SearchPhotosQuery, SearchPhotosQueryVariables>;

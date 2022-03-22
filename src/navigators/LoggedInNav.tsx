@@ -1,13 +1,17 @@
 import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
-import { View } from "react-native";
+import { Image, View } from "react-native";
+import { DEFAULT_AVATAR } from "../apollo";
+import useMe from "../hooks/useMe";
 import { LoggedInBottomTabNavParamList } from "../types/navigators";
 import SharedNav from "./SharedNav";
 
 const Tab = createBottomTabNavigator<LoggedInBottomTabNavParamList>();
 
 const LoggedInNav = () => {
+  const me = useMe();
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -74,11 +78,15 @@ const LoggedInNav = () => {
       <Tab.Screen
         name="MeTab"
         options={{
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? "person" : "person-outline"}
-              color={color}
-              size={22}
+          tabBarIcon: ({ focused }) => (
+            <Image
+              style={{
+                width: focused ? 22 : 20,
+                height: focused ? 22 : 20,
+                borderRadius: focused ? 11 : 10,
+                ...(focused && { borderWidth: 2, borderColor: "white" }),
+              }}
+              source={{ uri: me?.avatar || DEFAULT_AVATAR }}
             />
           ),
         }}>

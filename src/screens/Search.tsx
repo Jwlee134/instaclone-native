@@ -3,6 +3,7 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 import styled from "styled-components/native";
 import DismissKeyboard from "../components/DismissKeyboard";
+import { useSearchPhotosLazyQuery } from "../graphql/generated";
 import { SearchScreenProps } from "../types/navigators";
 
 const Input = styled.TextInput`
@@ -16,10 +17,11 @@ interface Form {
 }
 
 const Search = ({ navigation }: SearchScreenProps) => {
+  const [search, { data }] = useSearchPhotosLazyQuery();
   const { control, handleSubmit } = useForm<Form>();
 
-  const onValid: SubmitHandler<Form> = data => {
-    console.log(data);
+  const onValid: SubmitHandler<Form> = ({ keyword }) => {
+    search({ variables: { keyword } });
   };
 
   useLayoutEffect(() => {

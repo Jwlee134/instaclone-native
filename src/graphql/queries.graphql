@@ -29,3 +29,11 @@ query me {
     totalFollowing
   }
 }
+
+query searchPhotos($keyword: String!) {
+  searchPhotos(keyword: $keyword) {
+    id
+    file
+    createdAt
+  }
+}
