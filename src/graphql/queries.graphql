@@ -30,8 +30,8 @@ query me {
   }
 }
 
-query searchPhotos($keyword: String!) {
-  searchPhotos(keyword: $keyword) {
+query searchPhotos($keyword: String!, $lastId: Int) {
+  searchPhotos(keyword: $keyword, lastId: $lastId) {
     id
     file
     createdAt

@@ -1,15 +1,25 @@
 import React, { useCallback, useLayoutEffect } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { ActivityIndicator, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import styled from "styled-components/native";
 import DismissKeyboard from "../components/DismissKeyboard";
 import { useSearchPhotosLazyQuery } from "../graphql/generated";
 import { SearchScreenProps } from "../types/navigators";
 
 const Input = styled.TextInput`
-  background-color: white;
-  padding: 0;
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 0px 10px;
   margin: 0;
+  height: 30px;
+  border-radius: 5px;
+  color: white;
 `;
 
 const MessageContainer = styled.View`
@@ -29,7 +39,9 @@ interface Form {
 }
 
 const Search = ({ navigation }: SearchScreenProps) => {
-  const [search, { data, loading, called }] = useSearchPhotosLazyQuery();
+  const width = useWindowDimensions().width;
+  const [search, { data, loading, called, fetchMore, variables }] =
+    useSearchPhotosLazyQuery();
   const { control, handleSubmit } = useForm<Form>();
 
   const onValid: SubmitHandler<Form> = useCallback(
@@ -48,11 +60,12 @@ const Search = ({ navigation }: SearchScreenProps) => {
           name="keyword"
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
+              style={{ width: width / 1.5 }}
               onChangeText={onChange}
               onBlur={onBlur}
               value={value}
               placeholder="Search Photos"
-              placeholderTextColor="black"
+              placeholderTextColor="gray"
               autoCapitalize="none"
               returnKeyType="search"
               returnKeyLabel="search"
@@ -63,11 +76,20 @@ const Search = ({ navigation }: SearchScreenProps) => {
         />
       ),
     });
-  }, [navigation, control, handleSubmit, onValid]);
-  console.log(data);
+  }, [navigation, control, handleSubmit, onValid, width]);
+
+  const onEndReached = () => {
+    fetchMore({
+      variables: {
+        keyword: variables?.keyword,
+        lastId: data?.searchPhotos?.[data?.searchPhotos.length - 1]?.id,
+      },
+    });
+  };
+
   return (
     <DismissKeyboard>
-      <View style={{ flexGrow: 1 }}>
+      <View style={{ flex: 1 }}>
         {loading ? (
           <MessageContainer>
             <ActivityIndicator color="white" />
@@ -79,11 +101,33 @@ const Search = ({ navigation }: SearchScreenProps) => {
             <MessageText>Search by keyword.</MessageText>
           </MessageContainer>
         ) : null}
-        {data && !data.searchPhotos?.length ? (
-          <MessageContainer>
-            <MessageText>No results.</MessageText>
-          </MessageContainer>
-        ) : null}
+        {data &&
+          (!data.searchPhotos?.length ? (
+            <MessageContainer>
+              <MessageText>No results.</MessageText>
+            </MessageContainer>
+          ) : (
+            <FlatList
+              data={data.searchPhotos}
+              renderItem={({ item, index }) => (
+                <TouchableOpacity>
+                  <Image
+                    style={{
+                      width: width / 3 - 2 / 3,
+                      height: width / 3 - 2 / 3,
+                      marginBottom: 1,
+                      ...(index % 3 !== 2 && { marginRight: 1 }),
+                    }}
+                    source={{ uri: item?.file }}
+                  />
+                </TouchableOpacity>
+              )}
+              keyExtractor={item => `${item?.id}`}
+              onEndReached={onEndReached}
+              numColumns={3}
+              contentContainerStyle={{ flexGrow: 1 }}
+            />
+          ))}
       </View>
     </DismissKeyboard>
   );

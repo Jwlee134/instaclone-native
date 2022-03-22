@@ -412,6 +412,7 @@ export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', avatar
 
 export type SearchPhotosQueryVariables = Exact<{
   keyword: Scalars['String'];
+  lastId?: InputMaybe<Scalars['Int']>;
 }>;
 
 
@@ -748,8 +749,8 @@ export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const SearchPhotosDocument = gql`
-    query searchPhotos($keyword: String!) {
-  searchPhotos(keyword: $keyword) {
+    query searchPhotos($keyword: String!, $lastId: Int) {
+  searchPhotos(keyword: $keyword, lastId: $lastId) {
     id
     file
     createdAt
@@ -770,6 +771,7 @@ export const SearchPhotosDocument = gql`
  * const { data, loading, error } = useSearchPhotosQuery({
  *   variables: {
  *      keyword: // value for 'keyword'
+ *      lastId: // value for 'lastId'
  *   },
  * });
  */

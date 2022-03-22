@@ -40,7 +40,13 @@ const SharedNav = ({ name }: Props) => {
           component={Feed}
         />
       )}
-      {name === "Search" && <Stack.Screen name="Search" component={Search} />}
+      {name === "Search" && (
+        <Stack.Screen
+          options={{ headerTitleAlign: "center" }}
+          name="Search"
+          component={Search}
+        />
+      )}
       {name === "Notification" && (
         <Stack.Screen name="Notification" component={Notification} />
       )}
