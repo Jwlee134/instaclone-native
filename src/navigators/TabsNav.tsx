@@ -55,7 +55,7 @@ const TabsNav = ({ navigation }: TabsNavScreenProps) => {
         listeners={{
           tabPress: e => {
             e.preventDefault();
-            navigation.navigate("Upload");
+            navigation.navigate("UploadNav");
           },
         }}
         options={{

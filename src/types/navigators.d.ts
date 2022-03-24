@@ -23,7 +23,7 @@ export type CreateAccountScreenProps = NativeStackScreenProps<
 
 export type LoggedInStackNavParamList = {
   TabsNav: undefined;
-  Upload: undefined;
+  UploadNav: undefined;
 };
 
 export type TabsNavScreenProps = NativeStackScreenProps<
@@ -37,6 +37,15 @@ export type TabsNavParamList = {
   CameraTab: undefined;
   NotificationTab: undefined;
   MeTab: undefined;
+};
+
+export type UploadNavParamList = {
+  SelectPhotoNav: undefined;
+  TakePhoto: undefined;
+};
+
+export type SelectPhotoNavParamList = {
+  SelectPhoto: undefined;
 };
 
 export type SharedStackNavParamList = {

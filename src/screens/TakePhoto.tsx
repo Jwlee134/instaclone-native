@@ -1,12 +1,12 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-const Upload = () => {
+const TakePhoto = () => {
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text style={{ color: "white" }}>Upload</Text>
+      <Text style={{ color: "white" }}>TakePhoto</Text>
     </View>
   );
 };
 
-export default Upload;
+export default TakePhoto;
