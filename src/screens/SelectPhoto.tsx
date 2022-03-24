@@ -9,6 +9,7 @@ import {
   useWindowDimensions,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { SelectPhotoScreenProps } from "../types/navigators";
 
 const Container = styled.View`
   flex: 1;
@@ -33,7 +34,12 @@ const IconContainer = styled.View`
   right: 6px;
 `;
 
-const SelectPhoto = () => {
+const HeaderRightText = styled.Text`
+  color: white;
+  font-weight: 600;
+`;
+
+const SelectPhoto = ({ navigation }: SelectPhotoScreenProps) => {
   const width = useWindowDimensions().width;
   const [photos, setPhotos] = useState<MediaLibrary.Asset[]>([]);
   const [selectedPhotoUri, setSelectedPhotoUri] = useState("");
@@ -61,6 +67,17 @@ const SelectPhoto = () => {
   useEffect(() => {
     getPermission();
   }, [getPermission]);
+
+  useEffect(() => {
+    if (!photos.length) return;
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity>
+          <HeaderRightText>Next</HeaderRightText>
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation, photos]);
 
   return (
     <Container>

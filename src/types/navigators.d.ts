@@ -53,6 +53,14 @@ export type SelectPhotoNavParamList = {
   SelectPhoto: undefined;
 };
 
+export type SelectPhotoScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<SelectPhotoNavParamList, "SelectPhoto">,
+  CompositeScreenProps<
+    NativeStackScreenProps<UploadNavParamList>,
+    NativeStackScreenProps<LoggedInStackNavParamList>
+  >
+>;
+
 export type SharedStackNavParamList = {
   Feed: undefined;
   Search: undefined;
