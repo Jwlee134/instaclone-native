@@ -21,7 +21,17 @@ export type CreateAccountScreenProps = NativeStackScreenProps<
   "CreateAccount"
 >;
 
-export type LoggedInBottomTabNavParamList = {
+export type LoggedInStackNavParamList = {
+  TabsNav: undefined;
+  Upload: undefined;
+};
+
+export type TabsNavScreenProps = NativeStackScreenProps<
+  LoggedInStackNavParamList,
+  "TabsNav"
+>;
+
+export type TabsNavParamList = {
   FeedTab: undefined;
   SearchTab: undefined;
   CameraTab: undefined;
@@ -42,29 +52,50 @@ export type SharedStackNavParamList = {
 
 export type FeedScreenProps = CompositeScreenProps<
   NativeStackScreenProps<SharedStackNavParamList, "Feed">,
-  BottomTabScreenProps<LoggedInBottomTabNavParamList>
+  CompositeScreenProps<
+    BottomTabScreenProps<TabsNavParamList>,
+    NativeStackScreenProps<LoggedInStackNavParamList>
+  >
 >;
 export type PhotoScreenProps = CompositeScreenProps<
   NativeStackScreenProps<SharedStackNavParamList, "Photo">,
-  BottomTabScreenProps<LoggedInBottomTabNavParamList>
+  CompositeScreenProps<
+    BottomTabScreenProps<TabsNavParamList>,
+    NativeStackScreenProps<LoggedInStackNavParamList>
+  >
 >;
 export type SearchScreenProps = CompositeScreenProps<
   NativeStackScreenProps<SharedStackNavParamList, "Search">,
-  BottomTabScreenProps<LoggedInBottomTabNavParamList>
+  CompositeScreenProps<
+    BottomTabScreenProps<TabsNavParamList>,
+    NativeStackScreenProps<LoggedInStackNavParamList>
+  >
 >;
 export type ProfileScreenProps = CompositeScreenProps<
   NativeStackScreenProps<SharedStackNavParamList, "Profile">,
-  BottomTabScreenProps<LoggedInBottomTabNavParamList>
+  CompositeScreenProps<
+    BottomTabScreenProps<TabsNavParamList>,
+    NativeStackScreenProps<LoggedInStackNavParamList>
+  >
 >;
 export type LikesScreenProps = CompositeScreenProps<
   NativeStackScreenProps<SharedStackNavParamList, "Likes">,
-  BottomTabScreenProps<LoggedInBottomTabNavParamList>
+  CompositeScreenProps<
+    BottomTabScreenProps<TabsNavParamList>,
+    NativeStackScreenProps<LoggedInStackNavParamList>
+  >
 >;
 export type CommentsScreenProps = CompositeScreenProps<
   NativeStackScreenProps<SharedStackNavParamList, "Comments">,
-  BottomTabScreenProps<LoggedInBottomTabNavParamList>
+  CompositeScreenProps<
+    BottomTabScreenProps<TabsNavParamList>,
+    NativeStackScreenProps<LoggedInStackNavParamList>
+  >
 >;
 export type MeScreenProps = CompositeScreenProps<
   NativeStackScreenProps<SharedStackNavParamList, "Me">,
-  BottomTabScreenProps<LoggedInBottomTabNavParamList>
+  CompositeScreenProps<
+    BottomTabScreenProps<TabsNavParamList>,
+    NativeStackScreenProps<LoggedInStackNavParamList>
+  >
 >;

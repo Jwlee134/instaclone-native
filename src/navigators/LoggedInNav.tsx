@@ -1,98 +1,18 @@
-import { Ionicons } from "@expo/vector-icons";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import { Image, View } from "react-native";
-import { DEFAULT_AVATAR } from "../apollo";
-import useMe from "../hooks/useMe";
-import { LoggedInBottomTabNavParamList } from "../types/navigators";
-import SharedNav from "./SharedNav";
+import Upload from "../screens/Upload";
+import { LoggedInStackNavParamList } from "../types/navigators";
+import TabsNav from "./TabsNav";
 
-const Tab = createBottomTabNavigator<LoggedInBottomTabNavParamList>();
+const Stack = createNativeStackNavigator<LoggedInStackNavParamList>();
 
 const LoggedInNav = () => {
-  const me = useMe();
-
   return (
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-        tabBarShowLabel: false,
-        tabBarStyle: {
-          backgroundColor: "black",
-          borderTopColor: "rgba(255, 255, 255, 0.3)",
-        },
-        tabBarActiveTintColor: "white",
-      }}>
-      <Tab.Screen
-        name="FeedTab"
-        options={{
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? "home" : "home-outline"}
-              color={color}
-              size={22}
-            />
-          ),
-        }}>
-        {() => <SharedNav name="Feed" />}
-      </Tab.Screen>
-      <Tab.Screen
-        name="SearchTab"
-        options={{
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? "search" : "search-outline"}
-              color={color}
-              size={22}
-            />
-          ),
-        }}>
-        {() => <SharedNav name="Search" />}
-      </Tab.Screen>
-      <Tab.Screen
-        name="CameraTab"
-        component={View}
-        options={{
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? "camera" : "camera-outline"}
-              color={color}
-              size={22}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="NotificationTab"
-        options={{
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? "heart" : "heart-outline"}
-              color={color}
-              size={22}
-            />
-          ),
-        }}>
-        {() => <SharedNav name="Notification" />}
-      </Tab.Screen>
-      <Tab.Screen
-        name="MeTab"
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <Image
-              style={{
-                width: focused ? 22 : 20,
-                height: focused ? 22 : 20,
-                borderRadius: focused ? 11 : 10,
-                ...(focused && { borderWidth: 2, borderColor: "white" }),
-              }}
-              source={{ uri: me?.avatar || DEFAULT_AVATAR }}
-            />
-          ),
-        }}>
-        {() => <SharedNav name="Me" />}
-      </Tab.Screen>
-    </Tab.Navigator>
+    <Stack.Navigator
+      screenOptions={{ headerShown: false, presentation: "modal" }}>
+      <Stack.Screen name="TabsNav" component={TabsNav} />
+      <Stack.Screen name="Upload" component={Upload} />
+    </Stack.Navigator>
   );
 };
 
