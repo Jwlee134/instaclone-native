@@ -44,6 +44,11 @@ export type UploadNavParamList = {
   TakePhoto: undefined;
 };
 
+type SelectPhotoNavScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<UploadNavParamList, "SelectPhotoNav">,
+  NativeStackScreenProps<LoggedInStackNavParamList>
+>;
+
 export type SelectPhotoNavParamList = {
   SelectPhoto: undefined;
 };

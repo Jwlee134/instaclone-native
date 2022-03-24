@@ -1,11 +1,24 @@
 import React from "react";
-import { Text, View } from "react-native";
+import styled from "styled-components/native";
+
+const Container = styled.View`
+  flex: 1;
+`;
+
+const Top = styled.View`
+  flex: 1;
+`;
+
+const Bottom = styled.View`
+  flex: 1;
+`;
 
 const SelectPhoto = () => {
   return (
-    <View style={{ flex: 1 }}>
-      <Text style={{ color: "white" }}>SelectPhoto</Text>
-    </View>
+    <Container>
+      <Top></Top>
+      <Bottom></Bottom>
+    </Container>
   );
 };
 
