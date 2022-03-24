@@ -1,7 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components/native";
 import * as MediaLibrary from "expo-media-library";
-import { Alert } from "react-native";
+import {
+  Alert,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  useWindowDimensions,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 const Container = styled.View`
   flex: 1;
@@ -11,16 +18,31 @@ const Top = styled.View`
   flex: 1;
 `;
 
+const Thumbnail = styled.Image`
+  width: 100%;
+  height: 100%;
+`;
+
 const Bottom = styled.View`
   flex: 1;
 `;
 
+const IconContainer = styled.View`
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+`;
+
 const SelectPhoto = () => {
-  const [photos, setPhotos] = useState<string[]>([]);
+  const width = useWindowDimensions().width;
+  const [photos, setPhotos] = useState<MediaLibrary.Asset[]>([]);
+  const [selectedPhotoUri, setSelectedPhotoUri] = useState("");
 
   const getPhoto = async () => {
     const { assets } = await MediaLibrary.getAssetsAsync();
-    setPhotos(assets.map(asset => asset.uri));
+    if (!assets.length) return;
+    setSelectedPhotoUri(assets[0].uri);
+    setPhotos(assets);
   };
 
   const getPermission = useCallback(async () => {
@@ -42,8 +64,36 @@ const SelectPhoto = () => {
 
   return (
     <Container>
-      <Top></Top>
-      <Bottom></Bottom>
+      <Top>
+        {Boolean(selectedPhotoUri) && (
+          <Thumbnail source={{ uri: selectedPhotoUri }} />
+        )}
+      </Top>
+      <Bottom>
+        <FlatList
+          data={photos}
+          renderItem={({ item, index }) => (
+            <TouchableOpacity onPress={() => setSelectedPhotoUri(item.uri)}>
+              <Image
+                style={{
+                  width: width / 3 - 2 / 3,
+                  height: width / 3 - 2 / 3,
+                  marginBottom: 1,
+                  ...(index % 3 !== 2 && { marginRight: 1 }),
+                }}
+                source={{ uri: item.uri }}
+              />
+              {selectedPhotoUri === item.uri && (
+                <IconContainer>
+                  <Ionicons name="checkmark-circle" color="white" size={24} />
+                </IconContainer>
+              )}
+            </TouchableOpacity>
+          )}
+          keyExtractor={item => item.id}
+          numColumns={3}
+        />
+      </Bottom>
     </Container>
   );
 };
