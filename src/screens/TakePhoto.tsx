@@ -2,7 +2,7 @@ import {
   getCameraPermissionsAsync,
   requestCameraPermissionsAsync,
 } from "expo-camera";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Alert, Platform, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import { Camera } from "expo-camera";
@@ -50,9 +50,11 @@ const CloseButton = styled.TouchableOpacity`
 `;
 
 const TakePhoto = ({ navigation }: TakePhotoScreenProps) => {
+  const ref = useRef<Camera>(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [flashMode, setFlashMode] = useState(Camera.Constants.FlashMode.off);
   const [zoom, setZoom] = useState(0);
+  const [ready, setReady] = useState(false);
   const isFocused = useIsFocused();
   const top = useSafeAreaInsets().top;
 
@@ -95,13 +97,24 @@ const TakePhoto = ({ navigation }: TakePhotoScreenProps) => {
     });
   };
 
+  const takePhoto = async () => {
+    if (!ref.current || !ready) return;
+    const photo = await ref.current.takePictureAsync({
+      quality: 1,
+      exif: true,
+    });
+    console.log(photo);
+  };
+
   return (
     <Container>
       {isFocused && (
         <Camera
+          ref={ref}
           type={type}
           zoom={zoom}
           flashMode={flashMode}
+          onCameraReady={() => setReady(true)}
           style={{ flex: 1 }}>
           <CloseButton
             onPress={() => navigation.navigate("TabsNav")}
@@ -122,7 +135,7 @@ const TakePhoto = ({ navigation }: TakePhotoScreenProps) => {
           />
         </SliderContainer>
         <ButtonsContainer>
-          <TakePhotoBtn></TakePhotoBtn>
+          <TakePhotoBtn onPress={takePhoto} />
           <ActionsContainer>
             <TouchableOpacity
               onPress={onFlashChange}
