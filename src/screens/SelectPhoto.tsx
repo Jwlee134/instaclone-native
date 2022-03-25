@@ -61,6 +61,7 @@ const SelectPhoto = ({ navigation }: SelectPhotoScreenProps) => {
       await getPhoto();
     } else {
       await MediaLibrary.requestPermissionsAsync();
+      await getPermission();
     }
   }, []);
 
