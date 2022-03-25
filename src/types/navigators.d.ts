@@ -51,10 +51,18 @@ type SelectPhotoNavScreenProps = CompositeScreenProps<
 
 export type SelectPhotoNavParamList = {
   SelectPhoto: undefined;
+  TakePhoto: undefined;
 };
 
 export type SelectPhotoScreenProps = CompositeScreenProps<
   NativeStackScreenProps<SelectPhotoNavParamList, "SelectPhoto">,
+  CompositeScreenProps<
+    NativeStackScreenProps<UploadNavParamList>,
+    NativeStackScreenProps<LoggedInStackNavParamList>
+  >
+>;
+export type TakePhotoScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<SelectPhotoNavParamList, "TakePhoto">,
   CompositeScreenProps<
     NativeStackScreenProps<UploadNavParamList>,
     NativeStackScreenProps<LoggedInStackNavParamList>
