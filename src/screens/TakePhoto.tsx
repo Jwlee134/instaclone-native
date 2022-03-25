@@ -3,7 +3,7 @@ import {
   requestCameraPermissionsAsync,
 } from "expo-camera";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Alert, Image, Platform, Text, TouchableOpacity } from "react-native";
+import { Alert, Image, Platform, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import { Camera } from "expo-camera";
 import { Ionicons } from "@expo/vector-icons";
@@ -50,9 +50,13 @@ const CloseButton = styled.TouchableOpacity`
   left: 20px;
 `;
 
+const PhotoActions = styled(Actions)`
+  flex-direction: row;
+`;
+
 const PhotoAction = styled.TouchableOpacity`
   background-color: white;
-  padding: 5px 10px;
+  padding: 10px 25px;
   border-radius: 4px;
 `;
 
@@ -116,15 +120,23 @@ const TakePhoto = ({ navigation }: TakePhotoScreenProps) => {
       exif: true,
       skipProcessing: true,
     });
-    const asset = await MediaLibrary.createAssetAsync(photo.uri);
-    setTakenPhotoUri(asset.uri);
+    setTakenPhotoUri(photo.uri);
   };
 
   const onDismiss = () => setTakenPhotoUri("");
 
-  const onUpload = () => {};
+  const goToUpload = async (save: boolean) => {
+    if (save) {
+      await MediaLibrary.saveToLibraryAsync(takenPhotoUri);
+    }
+  };
 
-  const onSaveAndUpload = () => {};
+  const onUpload = () => {
+    Alert.alert("Do you want to save it?", "Save & upload or just upload it.", [
+      { text: "yes", onPress: () => goToUpload(true) },
+      { text: "no", onPress: () => goToUpload(false) },
+    ]);
+  };
 
   return (
     <Container>
@@ -147,57 +159,53 @@ const TakePhoto = ({ navigation }: TakePhotoScreenProps) => {
           </Camera>
         )
       )}
-      <Actions>
-        {takenPhotoUri ? (
-          <>
-            <PhotoAction onPress={onDismiss}>
-              <PhotoActionText>Dismiss</PhotoActionText>
-            </PhotoAction>
-            <PhotoAction onPress={onUpload}>
-              <PhotoActionText>Upload</PhotoActionText>
-            </PhotoAction>
-            <PhotoAction onPress={onSaveAndUpload}>
-              <PhotoActionText>Save & Upload</PhotoActionText>
-            </PhotoAction>
-          </>
-        ) : (
-          <>
-            <SliderContainer>
-              <Slider
-                style={{ width: 200, height: 40 }}
-                minimumValue={0}
-                maximumValue={1}
-                minimumTrackTintColor="#FFFFFF"
-                maximumTrackTintColor="rgba(255, 255, 255, 0.5)"
-                onValueChange={onZoomValueChange}
-              />
-            </SliderContainer>
-            <ButtonsContainer>
-              <TakePhotoBtn onPress={takePhoto} />
-              <ActionsContainer>
-                <TouchableOpacity
-                  onPress={onFlashChange}
-                  style={{ marginRight: 30 }}>
-                  <Ionicons
-                    color="white"
-                    size={30}
-                    name={
-                      flashMode === Camera.Constants.FlashMode.off
-                        ? "flash-off"
-                        : flashMode === Camera.Constants.FlashMode.on
-                        ? "flash"
-                        : "eye"
-                    }
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={onCameraChange}>
-                  <Ionicons color="white" size={30} name="camera-reverse" />
-                </TouchableOpacity>
-              </ActionsContainer>
-            </ButtonsContainer>
-          </>
-        )}
-      </Actions>
+
+      {takenPhotoUri ? (
+        <PhotoActions>
+          <PhotoAction onPress={onDismiss}>
+            <PhotoActionText>Dismiss</PhotoActionText>
+          </PhotoAction>
+          <PhotoAction onPress={onUpload}>
+            <PhotoActionText>Upload</PhotoActionText>
+          </PhotoAction>
+        </PhotoActions>
+      ) : (
+        <Actions>
+          <SliderContainer>
+            <Slider
+              style={{ width: 200, height: 40 }}
+              minimumValue={0}
+              maximumValue={1}
+              minimumTrackTintColor="#FFFFFF"
+              maximumTrackTintColor="rgba(255, 255, 255, 0.5)"
+              onValueChange={onZoomValueChange}
+            />
+          </SliderContainer>
+          <ButtonsContainer>
+            <TakePhotoBtn onPress={takePhoto} />
+            <ActionsContainer>
+              <TouchableOpacity
+                onPress={onFlashChange}
+                style={{ marginRight: 30 }}>
+                <Ionicons
+                  color="white"
+                  size={30}
+                  name={
+                    flashMode === Camera.Constants.FlashMode.off
+                      ? "flash-off"
+                      : flashMode === Camera.Constants.FlashMode.on
+                      ? "flash"
+                      : "eye"
+                  }
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={onCameraChange}>
+                <Ionicons color="white" size={30} name="camera-reverse" />
+              </TouchableOpacity>
+            </ActionsContainer>
+          </ButtonsContainer>
+        </Actions>
+      )}
     </Container>
   );
 };
