@@ -24,11 +24,16 @@ export type CreateAccountScreenProps = NativeStackScreenProps<
 export type LoggedInStackNavParamList = {
   TabsNav: undefined;
   UploadNav: undefined;
+  UploadForm: { file: string };
 };
 
 export type TabsNavScreenProps = NativeStackScreenProps<
   LoggedInStackNavParamList,
   "TabsNav"
+>;
+export type UploadFormScreenProps = NativeStackScreenProps<
+  LoggedInStackNavParamList,
+  "UploadForm"
 >;
 
 export type TabsNavParamList = {

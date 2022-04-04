@@ -129,6 +129,7 @@ const TakePhoto = ({ navigation }: TakePhotoScreenProps) => {
     if (save) {
       await MediaLibrary.saveToLibraryAsync(takenPhotoUri);
     }
+    navigation.navigate("UploadForm", { file: takenPhotoUri });
   };
 
   const onUpload = () => {

@@ -73,12 +73,15 @@ const SelectPhoto = ({ navigation }: SelectPhotoScreenProps) => {
     if (!photos.length) return;
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("UploadForm", { file: selectedPhotoUri });
+          }}>
           <HeaderRightText>Next</HeaderRightText>
         </TouchableOpacity>
       ),
     });
-  }, [navigation, photos]);
+  }, [navigation, photos, selectedPhotoUri]);
 
   return (
     <Container>
