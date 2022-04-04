@@ -49,7 +49,17 @@ const UploadForm = ({
 }: UploadFormScreenProps) => {
   const width = useWindowDimensions().width;
   const { control, handleSubmit } = useForm<Form>();
-  const [trigger, { loading }] = useUploadPhotoMutation();
+  const [trigger, { loading }] = useUploadPhotoMutation({
+    update: (cache, { data }) => {
+      const photo = data?.uploadPhoto;
+      if (!photo) return;
+      cache.modify({
+        id: "ROOT_QUERY",
+        fields: { seeFeed: prev => [photo, ...prev] },
+      });
+      navigation.navigate("TabsNav");
+    },
+  });
 
   const onValid = useCallback(
     ({ caption }: Form) => {

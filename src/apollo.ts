@@ -1,9 +1,5 @@
-import {
-  ApolloClient,
-  createHttpLink,
-  InMemoryCache,
-  makeVar,
-} from "@apollo/client";
+import { ApolloClient, InMemoryCache, makeVar } from "@apollo/client";
+import { createUploadLink } from "apollo-upload-client";
 import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -26,10 +22,6 @@ export const logUserOut = async () => {
 
 export const tokenVar = makeVar("");
 
-const httpLink = createHttpLink({
-  uri: "http://192.168.0.6:4000/graphql",
-});
-
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
     graphQLErrors.forEach(({ message, locations, path }) =>
@@ -43,6 +35,10 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 const authLink = setContext((_, { headers }) => ({
   headers: { ...headers, token: tokenVar() },
 }));
+
+const uploadHttpLink = createUploadLink({
+  uri: "http://192.168.0.7:4000/graphql",
+});
 
 export const cache = new InMemoryCache({
   // keyArgs false = seeFeed 쿼리에서 lastId 인자가 바뀜에 따라 쿼리가 다른 쿼리로 인식되는 걸 방지
@@ -60,7 +56,7 @@ export const cache = new InMemoryCache({
 });
 
 const client = new ApolloClient({
-  link: authLink.concat(errorLink).concat(httpLink),
+  link: authLink.concat(errorLink).concat(uploadHttpLink),
   cache,
 });
 
