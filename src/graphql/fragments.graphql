@@ -23,3 +23,16 @@ fragment UserFragment on User {
   isFollowing
   isMe
 }
+
+fragment FeedFragment on Photo {
+  ...PhotoFragment
+  owner {
+    id
+    username
+    avatar
+  }
+  caption
+  createdAt
+  isMine
+  isLiked
+}

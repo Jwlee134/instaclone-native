@@ -1,18 +1,6 @@
 query seeFeed($lastId: Int) {
   seeFeed(lastId: $lastId) {
-    ...PhotoFragment
-    owner {
-      id
-      username
-      avatar
-    }
-    caption
-    comments {
-      ...CommentFragment
-    }
-    createdAt
-    isMine
-    isLiked
+    ...FeedFragment
   }
 }
 

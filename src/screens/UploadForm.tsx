@@ -1,9 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { TouchableOpacity, useWindowDimensions } from "react-native";
+import {
+  ActivityIndicator,
+  TouchableOpacity,
+  useWindowDimensions,
+} from "react-native";
 import styled from "styled-components/native";
 import DismissKeyboard from "../components/DismissKeyboard";
+import { useUploadPhotoMutation } from "../graphql/generated";
 import { UploadFormScreenProps } from "../types/navigators";
+import { ReactNativeFile } from "apollo-upload-client";
 
 const Container = styled.View``;
 
@@ -43,20 +49,33 @@ const UploadForm = ({
 }: UploadFormScreenProps) => {
   const width = useWindowDimensions().width;
   const { control, handleSubmit } = useForm<Form>();
+  const [trigger, { loading }] = useUploadPhotoMutation();
+
+  const onValid = useCallback(
+    ({ caption }: Form) => {
+      const newFile = new ReactNativeFile({
+        uri: file,
+        name: "a.jpg",
+        type: "image/jpeg",
+      });
+      trigger({ variables: { file: newFile, caption } });
+    },
+    [file, trigger],
+  );
 
   useEffect(() => {
     navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity>
-          <HeaderRightText>Next</HeaderRightText>
-        </TouchableOpacity>
-      ),
+      headerRight: () =>
+        loading ? (
+          <ActivityIndicator />
+        ) : (
+          <TouchableOpacity onPress={handleSubmit(onValid)}>
+            <HeaderRightText>Upload</HeaderRightText>
+          </TouchableOpacity>
+        ),
+      ...(loading && { headerLeft: () => null }),
     });
-  }, [navigation]);
-
-  const onValid = ({ caption }: Form) => {
-    console.log(caption);
-  };
+  }, [navigation, loading, handleSubmit, onValid]);
 
   return (
     <DismissKeyboard>

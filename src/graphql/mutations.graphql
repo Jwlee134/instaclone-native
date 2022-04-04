@@ -45,3 +45,9 @@ mutation unfollowUser($username: String!) {
     error
   }
 }
+
+mutation uploadPhoto($file: Upload!, $caption: String) {
+  uploadPhoto(file: $file, caption: $caption) {
+    ...FeedFragment
+  }
+}
