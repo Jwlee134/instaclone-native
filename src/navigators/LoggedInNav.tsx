@@ -5,6 +5,7 @@ import React from "react";
 import { TouchableOpacity } from "react-native";
 import UploadForm from "../screens/UploadForm";
 import { LoggedInStackNavParamList } from "../types/navigators";
+import MessageNav from "./MessageNav";
 import TabsNav from "./TabsNav";
 import UploadNav from "./UploadNav";
 
@@ -24,6 +25,21 @@ const LoggedInNav = () => {
         options={{ headerShown: false }}
         name="UploadNav"
         component={UploadNav}
+      />
+      <Stack.Screen
+        options={{
+          title: "Messages",
+          headerStyle: { backgroundColor: "black" },
+          headerTitleAlign: "center",
+          headerTintColor: "white",
+          headerLeft: ({ tintColor }) => (
+            <TouchableOpacity onPress={navigation.goBack}>
+              <Ionicons name="close" size={24} color={tintColor} />
+            </TouchableOpacity>
+          ),
+        }}
+        name="MessageNav"
+        component={MessageNav}
       />
       <Stack.Screen
         options={{

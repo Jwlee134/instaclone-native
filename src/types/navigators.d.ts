@@ -25,6 +25,7 @@ export type LoggedInStackNavParamList = {
   TabsNav: undefined;
   UploadNav: undefined;
   UploadForm: { file: string };
+  MessageNav: undefined;
 };
 
 export type TabsNavScreenProps = NativeStackScreenProps<
@@ -134,3 +135,8 @@ export type MeScreenProps = CompositeScreenProps<
     NativeStackScreenProps<LoggedInStackNavParamList>
   >
 >;
+
+export type MessageStackNavParamList = {
+  Rooms: undefined;
+  Room: undefined;
+};

@@ -37,7 +37,7 @@ const authLink = setContext((_, { headers }) => ({
 }));
 
 const uploadHttpLink = createUploadLink({
-  uri: "http://192.168.0.7:4000/graphql",
+  uri: "http://192.168.0.6:4000/graphql",
 });
 
 export const cache = new InMemoryCache({
