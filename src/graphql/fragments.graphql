@@ -36,3 +36,12 @@ fragment FeedFragment on Photo {
   isMine
   isLiked
 }
+
+fragment RoomFragment on Room {
+  id
+  users {
+    avatar
+    username
+  }
+  totalUnread
+}

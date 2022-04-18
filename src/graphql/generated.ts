@@ -353,6 +353,8 @@ export type UserFragmentFragment = { __typename?: 'User', id: number, username: 
 
 export type FeedFragmentFragment = { __typename?: 'Photo', caption?: string | null, createdAt: string, isMine: boolean, isLiked: boolean, id: number, file: string, likes: number, numOfComments: number, owner?: { __typename?: 'User', id: number, username: string, avatar?: string | null } | null };
 
+export type RoomFragmentFragment = { __typename?: 'Room', id: number, totalUnread: number, users?: Array<{ __typename?: 'User', avatar?: string | null, username: string } | null> | null };
+
 export type LoginMutationVariables = Exact<{
   username: Scalars['String'];
   password: Scalars['String'];
@@ -435,6 +437,11 @@ export type SearchPhotosQueryVariables = Exact<{
 
 export type SearchPhotosQuery = { __typename?: 'Query', searchPhotos?: Array<{ __typename?: 'Photo', id: number, file: string, createdAt: string } | null> | null };
 
+export type SeeRoomsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SeeRoomsQuery = { __typename?: 'Query', seeRooms?: Array<{ __typename?: 'Room', id: number, totalUnread: number, users?: Array<{ __typename?: 'User', avatar?: string | null, username: string } | null> | null } | null> | null };
+
 export const CommentFragmentFragmentDoc = gql`
     fragment CommentFragment on Comment {
   id
@@ -478,6 +485,16 @@ export const FeedFragmentFragmentDoc = gql`
   isLiked
 }
     ${PhotoFragmentFragmentDoc}`;
+export const RoomFragmentFragmentDoc = gql`
+    fragment RoomFragment on Room {
+  id
+  users {
+    avatar
+    username
+  }
+  totalUnread
+}
+    `;
 export const LoginDocument = gql`
     mutation login($username: String!, $password: String!) {
   login(username: $username, password: $password) {
@@ -883,3 +900,37 @@ export function useSearchPhotosLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type SearchPhotosQueryHookResult = ReturnType<typeof useSearchPhotosQuery>;
 export type SearchPhotosLazyQueryHookResult = ReturnType<typeof useSearchPhotosLazyQuery>;
 export type SearchPhotosQueryResult = Apollo.QueryResult<SearchPhotosQuery, SearchPhotosQueryVariables>;
+export const SeeRoomsDocument = gql`
+    query seeRooms {
+  seeRooms {
+    ...RoomFragment
+  }
+}
+    ${RoomFragmentFragmentDoc}`;
+
+/**
+ * __useSeeRoomsQuery__
+ *
+ * To run a query within a React component, call `useSeeRoomsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSeeRoomsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSeeRoomsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSeeRoomsQuery(baseOptions?: Apollo.QueryHookOptions<SeeRoomsQuery, SeeRoomsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SeeRoomsQuery, SeeRoomsQueryVariables>(SeeRoomsDocument, options);
+      }
+export function useSeeRoomsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SeeRoomsQuery, SeeRoomsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SeeRoomsQuery, SeeRoomsQueryVariables>(SeeRoomsDocument, options);
+        }
+export type SeeRoomsQueryHookResult = ReturnType<typeof useSeeRoomsQuery>;
+export type SeeRoomsLazyQueryHookResult = ReturnType<typeof useSeeRoomsLazyQuery>;
+export type SeeRoomsQueryResult = Apollo.QueryResult<SeeRoomsQuery, SeeRoomsQueryVariables>;

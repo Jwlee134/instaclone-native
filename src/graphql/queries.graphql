@@ -41,3 +41,9 @@ query searchPhotos($keyword: String!, $lastId: Int) {
     createdAt
   }
 }
+
+query seeRooms {
+  seeRooms {
+    ...RoomFragment
+  }
+}

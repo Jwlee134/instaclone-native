@@ -140,3 +140,8 @@ export type MessageStackNavParamList = {
   Rooms: undefined;
   Room: undefined;
 };
+
+export type RoomsScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<MessageStackNavParamList, "Rooms">,
+  NativeStackScreenProps<LoggedInStackNavParamList>
+>;
