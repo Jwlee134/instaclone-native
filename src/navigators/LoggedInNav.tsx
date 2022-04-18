@@ -27,17 +27,7 @@ const LoggedInNav = () => {
         component={UploadNav}
       />
       <Stack.Screen
-        options={{
-          title: "Messages",
-          headerStyle: { backgroundColor: "black" },
-          headerTitleAlign: "center",
-          headerTintColor: "white",
-          headerLeft: ({ tintColor }) => (
-            <TouchableOpacity onPress={navigation.goBack}>
-              <Ionicons name="close" size={24} color={tintColor} />
-            </TouchableOpacity>
-          ),
-        }}
+        options={{ headerShown: false }}
         name="MessageNav"
         component={MessageNav}
       />

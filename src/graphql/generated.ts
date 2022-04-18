@@ -442,6 +442,13 @@ export type SeeRoomsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type SeeRoomsQuery = { __typename?: 'Query', seeRooms?: Array<{ __typename?: 'Room', id: number, totalUnread: number, users?: Array<{ __typename?: 'User', avatar?: string | null, username: string } | null> | null } | null> | null };
 
+export type SeeRoomQueryVariables = Exact<{
+  seeRoomId: Scalars['Int'];
+}>;
+
+
+export type SeeRoomQuery = { __typename?: 'Query', seeRoom?: { __typename?: 'Room', id: number, messages?: Array<{ __typename?: 'Message', id: number, text: string, read: boolean, user: { __typename?: 'User', username: string, avatar?: string | null, createdAt: string } } | null> | null } | null };
+
 export const CommentFragmentFragmentDoc = gql`
     fragment CommentFragment on Comment {
   id
@@ -934,3 +941,48 @@ export function useSeeRoomsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<S
 export type SeeRoomsQueryHookResult = ReturnType<typeof useSeeRoomsQuery>;
 export type SeeRoomsLazyQueryHookResult = ReturnType<typeof useSeeRoomsLazyQuery>;
 export type SeeRoomsQueryResult = Apollo.QueryResult<SeeRoomsQuery, SeeRoomsQueryVariables>;
+export const SeeRoomDocument = gql`
+    query seeRoom($seeRoomId: Int!) {
+  seeRoom(id: $seeRoomId) {
+    id
+    messages {
+      id
+      text
+      user {
+        username
+        avatar
+        createdAt
+      }
+      read
+    }
+  }
+}
+    `;
+
+/**
+ * __useSeeRoomQuery__
+ *
+ * To run a query within a React component, call `useSeeRoomQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSeeRoomQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSeeRoomQuery({
+ *   variables: {
+ *      seeRoomId: // value for 'seeRoomId'
+ *   },
+ * });
+ */
+export function useSeeRoomQuery(baseOptions: Apollo.QueryHookOptions<SeeRoomQuery, SeeRoomQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SeeRoomQuery, SeeRoomQueryVariables>(SeeRoomDocument, options);
+      }
+export function useSeeRoomLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SeeRoomQuery, SeeRoomQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SeeRoomQuery, SeeRoomQueryVariables>(SeeRoomDocument, options);
+        }
+export type SeeRoomQueryHookResult = ReturnType<typeof useSeeRoomQuery>;
+export type SeeRoomLazyQueryHookResult = ReturnType<typeof useSeeRoomLazyQuery>;
+export type SeeRoomQueryResult = Apollo.QueryResult<SeeRoomQuery, SeeRoomQueryVariables>;

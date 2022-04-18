@@ -47,3 +47,19 @@ query seeRooms {
     ...RoomFragment
   }
 }
+
+query seeRoom($seeRoomId: Int!) {
+  seeRoom(id: $seeRoomId) {
+    id
+    messages {
+      id
+      text
+      user {
+        username
+        avatar
+        createdAt
+      }
+      read
+    }
+  }
+}

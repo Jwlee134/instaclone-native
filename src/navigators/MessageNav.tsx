@@ -8,7 +8,14 @@ const Stack = createNativeStackNavigator<MessageStackNavParamList>();
 
 const MessageNav = () => {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator
+      screenOptions={{
+        title: "Messages",
+        headerStyle: { backgroundColor: "black" },
+        headerTitleAlign: "center",
+        headerTintColor: "white",
+        headerBackTitleVisible: false,
+      }}>
       <Stack.Screen name="Rooms" component={Rooms} />
       <Stack.Screen name="Room" component={Room} />
     </Stack.Navigator>
