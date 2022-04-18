@@ -403,6 +403,15 @@ export type UploadPhotoMutationVariables = Exact<{
 
 export type UploadPhotoMutation = { __typename?: 'Mutation', uploadPhoto?: { __typename?: 'Photo', caption?: string | null, createdAt: string, isMine: boolean, isLiked: boolean, id: number, file: string, likes: number, numOfComments: number, owner?: { __typename?: 'User', id: number, username: string, avatar?: string | null } | null } | null };
 
+export type SendMessageMutationVariables = Exact<{
+  text: Scalars['String'];
+  userId: Scalars['Int'];
+  roomId: Scalars['Int'];
+}>;
+
+
+export type SendMessageMutation = { __typename?: 'Mutation', sendMessage: { __typename?: 'MutationResponse', isSuccess: boolean, id?: number | null, error?: string | null } };
+
 export type SeeFeedQueryVariables = Exact<{
   lastId?: InputMaybe<Scalars['Int']>;
 }>;
@@ -718,6 +727,43 @@ export function useUploadPhotoMutation(baseOptions?: Apollo.MutationHookOptions<
 export type UploadPhotoMutationHookResult = ReturnType<typeof useUploadPhotoMutation>;
 export type UploadPhotoMutationResult = Apollo.MutationResult<UploadPhotoMutation>;
 export type UploadPhotoMutationOptions = Apollo.BaseMutationOptions<UploadPhotoMutation, UploadPhotoMutationVariables>;
+export const SendMessageDocument = gql`
+    mutation sendMessage($text: String!, $userId: Int!, $roomId: Int!) {
+  sendMessage(text: $text, userId: $userId, roomId: $roomId) {
+    isSuccess
+    id
+    error
+  }
+}
+    `;
+export type SendMessageMutationFn = Apollo.MutationFunction<SendMessageMutation, SendMessageMutationVariables>;
+
+/**
+ * __useSendMessageMutation__
+ *
+ * To run a mutation, you first call `useSendMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendMessageMutation, { data, loading, error }] = useSendMessageMutation({
+ *   variables: {
+ *      text: // value for 'text'
+ *      userId: // value for 'userId'
+ *      roomId: // value for 'roomId'
+ *   },
+ * });
+ */
+export function useSendMessageMutation(baseOptions?: Apollo.MutationHookOptions<SendMessageMutation, SendMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SendMessageMutation, SendMessageMutationVariables>(SendMessageDocument, options);
+      }
+export type SendMessageMutationHookResult = ReturnType<typeof useSendMessageMutation>;
+export type SendMessageMutationResult = Apollo.MutationResult<SendMessageMutation>;
+export type SendMessageMutationOptions = Apollo.BaseMutationOptions<SendMessageMutation, SendMessageMutationVariables>;
 export const SeeFeedDocument = gql`
     query seeFeed($lastId: Int) {
   seeFeed(lastId: $lastId) {

@@ -51,3 +51,11 @@ mutation uploadPhoto($file: Upload!, $caption: String) {
     ...FeedFragment
   }
 }
+
+mutation sendMessage($text: String!, $userId: Int!, $roomId: Int!) {
+  sendMessage(text: $text, userId: $userId, roomId: $roomId) {
+    isSuccess
+    id
+    error
+  }
+}
