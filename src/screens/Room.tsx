@@ -1,3 +1,5 @@
+/* eslint-disable no-extra-boolean-cast */
+import { Ionicons } from "@expo/vector-icons";
 import React, { useLayoutEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { FlatList, KeyboardAvoidingView, Platform, View } from "react-native";
@@ -31,15 +33,23 @@ const Message = styled.Text`
   max-width: 60%;
 `;
 
+const InputContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  padding: 0 10px;
+`;
+
 const Input = styled.TextInput`
   height: 40px;
   padding: 0 20px;
   border-radius: 1000px;
-  width: 95%;
+  width: 90%;
   margin: 0 auto;
   border: 1px solid rgba(255, 255, 255, 0.5);
   color: white;
 `;
+
+const SendButton = styled.TouchableOpacity``;
 
 interface Form {
   message: string;
@@ -52,7 +62,7 @@ const Room = ({
   },
 }: RoomScreenProps) => {
   const bottom = useSafeAreaInsets().bottom;
-  const { control, handleSubmit, setValue } = useForm<Form>();
+  const { control, handleSubmit, setValue, watch } = useForm<Form>();
 
   useLayoutEffect(() => {
     navigation.setOptions({ title });
@@ -87,13 +97,14 @@ const Room = ({
       }>
       <ScreenLayout loading={loading}>
         <FlatList
-          style={{ paddingBottom: bottom }}
+          inverted
           ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
           contentContainerStyle={{
             flexGrow: 1,
             justifyContent: "flex-end",
+            paddingVertical: bottom,
           }}
-          data={seeRoom?.messages || []}
+          data={[...(seeRoom?.messages || [])].reverse() || []}
           renderItem={({ item }) => (
             <MessageContainer isMine={item?.user.username !== title}>
               <Avatar source={{ uri: item?.user.avatar || DEFAULT_AVATAR }} />
@@ -102,23 +113,39 @@ const Room = ({
           )}
           keyExtractor={item => item?.id + ""}
         />
-        <Controller
-          control={control}
-          rules={{ required: true }}
-          name="message"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              style={{ marginBottom: bottom }}
-              placeholder="Write a message..."
-              placeholderTextColor="rgba(255, 255, 255, 0.5)"
-              returnKeyType="send"
-              onChangeText={onChange}
-              onBlur={onBlur}
-              value={value}
-              onSubmitEditing={handleSubmit(onValid)}
+        <InputContainer>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            name="message"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Input
+                style={{ marginBottom: bottom }}
+                placeholder="Write a message..."
+                placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                returnKeyType="send"
+                onChangeText={onChange}
+                onBlur={onBlur}
+                value={value}
+                onSubmitEditing={handleSubmit(onValid)}
+              />
+            )}
+          />
+          <SendButton
+            onPress={handleSubmit(onValid)}
+            disabled={!Boolean(watch("message"))}
+            style={{ marginBottom: bottom }}>
+            <Ionicons
+              name="send"
+              color={
+                !Boolean(watch("message"))
+                  ? "rgba(255, 255, 255, 0.5)"
+                  : "white"
+              }
+              size={20}
             />
-          )}
-        />
+          </SendButton>
+        </InputContainer>
       </ScreenLayout>
     </KeyboardAvoidingView>
   );
