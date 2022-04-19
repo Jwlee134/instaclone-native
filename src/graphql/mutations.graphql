@@ -52,7 +52,7 @@ mutation uploadPhoto($file: Upload!, $caption: String) {
   }
 }
 
-mutation sendMessage($text: String!, $userId: Int!, $roomId: Int!) {
+mutation sendMessage($text: String!, $userId: Int!, $roomId: Int) {
   sendMessage(text: $text, userId: $userId, roomId: $roomId) {
     isSuccess
     id

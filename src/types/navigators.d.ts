@@ -138,7 +138,7 @@ export type MeScreenProps = CompositeScreenProps<
 
 export type MessageStackNavParamList = {
   Rooms: undefined;
-  Room: { id: number; title: string };
+  Room: { roomId: number; title: string; userId: number };
 };
 
 export type RoomsScreenProps = CompositeScreenProps<

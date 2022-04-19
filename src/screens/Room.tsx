@@ -1,10 +1,13 @@
+import { gql } from "@apollo/client";
 import React, { useLayoutEffect } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { FlatList, KeyboardAvoidingView, Platform, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 import { DEFAULT_AVATAR } from "../apollo";
 import ScreenLayout from "../components/ScreenLayout";
-import { useSeeRoomQuery } from "../graphql/generated";
+import { useSeeRoomQuery, useSendMessageMutation } from "../graphql/generated";
+import useMe from "../hooks/useMe";
 import { RoomScreenProps } from "../types/navigators";
 
 const MessageContainer = styled.View<{ isMine: boolean }>`
@@ -27,6 +30,7 @@ const Message = styled.Text`
   overflow: hidden;
   font-size: 16px;
   margin: 0 10px;
+  max-width: 60%;
 `;
 
 const Input = styled.TextInput`
@@ -39,21 +43,74 @@ const Input = styled.TextInput`
   color: white;
 `;
 
+interface Form {
+  message: string;
+}
+
 const Room = ({
   navigation,
   route: {
-    params: { id, title },
+    params: { roomId, title, userId },
   },
 }: RoomScreenProps) => {
+  const me = useMe();
   const bottom = useSafeAreaInsets().bottom;
+  const { control, handleSubmit, setValue, getValues } = useForm<Form>();
 
   useLayoutEffect(() => {
     navigation.setOptions({ title });
   }, [navigation, title]);
 
   const { data: { seeRoom } = {}, loading } = useSeeRoomQuery({
-    variables: { seeRoomId: id },
+    variables: { seeRoomId: roomId },
   });
+  const [send, { loading: sendingMessage }] = useSendMessageMutation({
+    update: (cache, { data }) => {
+      if (!data?.sendMessage.isSuccess) return;
+      const newMessage = {
+        __typename: "Message",
+        id: data.sendMessage.id,
+        text: getValues("message"),
+        user: {
+          id: me?.id,
+          username: me?.username,
+          avatar: me?.avatar,
+          createAt: Date.now(),
+        },
+        read: false,
+      };
+      const ref = cache.writeFragment({
+        fragment: gql`
+          fragment NewMessage on Message {
+            id
+            text
+            user {
+              id
+              username
+              avatar
+              createdAt
+            }
+            read
+          }
+        `,
+        data: newMessage,
+      });
+      cache.modify({
+        id: `Room:${roomId}`,
+        fields: {
+          messages(prev) {
+            return [...prev, ref];
+          },
+        },
+      });
+      setValue("message", "");
+    },
+  });
+
+  const onValid = ({ message }: Form) => {
+    if (sendingMessage) return;
+    send({ variables: { text: message, roomId, userId } });
+  };
 
   return (
     <KeyboardAvoidingView
@@ -76,11 +133,22 @@ const Room = ({
           )}
           keyExtractor={item => item?.id + ""}
         />
-        <Input
-          style={{ marginBottom: bottom }}
-          placeholder="Write a message..."
-          placeholderTextColor="rgba(255, 255, 255, 0.5)"
-          returnKeyType="send"
+        <Controller
+          control={control}
+          rules={{ required: true }}
+          name="message"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input
+              style={{ marginBottom: bottom }}
+              placeholder="Write a message..."
+              placeholderTextColor="rgba(255, 255, 255, 0.5)"
+              returnKeyType="send"
+              onChangeText={onChange}
+              onBlur={onBlur}
+              value={value}
+              onSubmitEditing={handleSubmit(onValid)}
+            />
+          )}
         />
       </ScreenLayout>
     </KeyboardAvoidingView>

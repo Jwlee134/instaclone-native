@@ -40,6 +40,7 @@ fragment FeedFragment on Photo {
 fragment RoomFragment on Room {
   id
   users {
+    id
     avatar
     username
   }

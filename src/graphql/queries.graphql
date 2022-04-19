@@ -27,6 +27,7 @@ query seeLikes($seePhotoLikesId: Int!) {
 
 query me {
   me {
+    id
     avatar
     username
     totalFollowers
@@ -55,6 +56,7 @@ query seeRoom($seeRoomId: Int!) {
       id
       text
       user {
+        id
         username
         avatar
         createdAt

@@ -53,6 +53,7 @@ interface Props {
     users?:
       | ({
           __typename?: "User" | undefined;
+          id: number;
           avatar?: string | null | undefined;
           username: string;
         } | null)[]
@@ -70,8 +71,9 @@ const RoomItem = ({ item }: Props) => {
     <RoomContainer
       onPress={() =>
         navigation.navigate("Room", {
-          id: item?.id!,
+          roomId: item?.id!,
           title: partner?.username!,
+          userId: partner?.id!,
         })
       }>
       <Column>

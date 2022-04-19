@@ -353,7 +353,7 @@ export type UserFragmentFragment = { __typename?: 'User', id: number, username: 
 
 export type FeedFragmentFragment = { __typename?: 'Photo', caption?: string | null, createdAt: string, isMine: boolean, isLiked: boolean, id: number, file: string, likes: number, numOfComments: number, owner?: { __typename?: 'User', id: number, username: string, avatar?: string | null } | null };
 
-export type RoomFragmentFragment = { __typename?: 'Room', id: number, totalUnread: number, users?: Array<{ __typename?: 'User', avatar?: string | null, username: string } | null> | null };
+export type RoomFragmentFragment = { __typename?: 'Room', id: number, totalUnread: number, users?: Array<{ __typename?: 'User', id: number, avatar?: string | null, username: string } | null> | null };
 
 export type LoginMutationVariables = Exact<{
   username: Scalars['String'];
@@ -406,7 +406,7 @@ export type UploadPhotoMutation = { __typename?: 'Mutation', uploadPhoto?: { __t
 export type SendMessageMutationVariables = Exact<{
   text: Scalars['String'];
   userId: Scalars['Int'];
-  roomId: Scalars['Int'];
+  roomId?: InputMaybe<Scalars['Int']>;
 }>;
 
 
@@ -436,7 +436,7 @@ export type SeeLikesQuery = { __typename?: 'Query', seePhotoLikes?: Array<{ __ty
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', avatar?: string | null, username: string, totalFollowers: number, totalFollowing: number } | null };
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: number, avatar?: string | null, username: string, totalFollowers: number, totalFollowing: number } | null };
 
 export type SearchPhotosQueryVariables = Exact<{
   keyword: Scalars['String'];
@@ -449,14 +449,14 @@ export type SearchPhotosQuery = { __typename?: 'Query', searchPhotos?: Array<{ _
 export type SeeRoomsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SeeRoomsQuery = { __typename?: 'Query', seeRooms?: Array<{ __typename?: 'Room', id: number, totalUnread: number, users?: Array<{ __typename?: 'User', avatar?: string | null, username: string } | null> | null } | null> | null };
+export type SeeRoomsQuery = { __typename?: 'Query', seeRooms?: Array<{ __typename?: 'Room', id: number, totalUnread: number, users?: Array<{ __typename?: 'User', id: number, avatar?: string | null, username: string } | null> | null } | null> | null };
 
 export type SeeRoomQueryVariables = Exact<{
   seeRoomId: Scalars['Int'];
 }>;
 
 
-export type SeeRoomQuery = { __typename?: 'Query', seeRoom?: { __typename?: 'Room', id: number, messages?: Array<{ __typename?: 'Message', id: number, text: string, read: boolean, user: { __typename?: 'User', username: string, avatar?: string | null, createdAt: string } } | null> | null } | null };
+export type SeeRoomQuery = { __typename?: 'Query', seeRoom?: { __typename?: 'Room', id: number, messages?: Array<{ __typename?: 'Message', id: number, text: string, read: boolean, user: { __typename?: 'User', id: number, username: string, avatar?: string | null, createdAt: string } } | null> | null } | null };
 
 export const CommentFragmentFragmentDoc = gql`
     fragment CommentFragment on Comment {
@@ -505,6 +505,7 @@ export const RoomFragmentFragmentDoc = gql`
     fragment RoomFragment on Room {
   id
   users {
+    id
     avatar
     username
   }
@@ -728,7 +729,7 @@ export type UploadPhotoMutationHookResult = ReturnType<typeof useUploadPhotoMuta
 export type UploadPhotoMutationResult = Apollo.MutationResult<UploadPhotoMutation>;
 export type UploadPhotoMutationOptions = Apollo.BaseMutationOptions<UploadPhotoMutation, UploadPhotoMutationVariables>;
 export const SendMessageDocument = gql`
-    mutation sendMessage($text: String!, $userId: Int!, $roomId: Int!) {
+    mutation sendMessage($text: String!, $userId: Int!, $roomId: Int) {
   sendMessage(text: $text, userId: $userId, roomId: $roomId) {
     isSuccess
     id
@@ -881,6 +882,7 @@ export type SeeLikesQueryResult = Apollo.QueryResult<SeeLikesQuery, SeeLikesQuer
 export const MeDocument = gql`
     query me {
   me {
+    id
     avatar
     username
     totalFollowers
@@ -995,6 +997,7 @@ export const SeeRoomDocument = gql`
       id
       text
       user {
+        id
         username
         avatar
         createdAt
