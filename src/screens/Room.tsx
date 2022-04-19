@@ -1,4 +1,3 @@
-import { gql } from "@apollo/client";
 import React, { useLayoutEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { FlatList, KeyboardAvoidingView, Platform, View } from "react-native";
@@ -7,7 +6,6 @@ import styled from "styled-components/native";
 import { DEFAULT_AVATAR } from "../apollo";
 import ScreenLayout from "../components/ScreenLayout";
 import { useSeeRoomQuery, useSendMessageMutation } from "../graphql/generated";
-import useMe from "../hooks/useMe";
 import { RoomScreenProps } from "../types/navigators";
 
 const MessageContainer = styled.View<{ isMine: boolean }>`
@@ -53,56 +51,24 @@ const Room = ({
     params: { roomId, title, userId },
   },
 }: RoomScreenProps) => {
-  const me = useMe();
   const bottom = useSafeAreaInsets().bottom;
-  const { control, handleSubmit, setValue, getValues } = useForm<Form>();
+  const { control, handleSubmit, setValue } = useForm<Form>();
 
   useLayoutEffect(() => {
     navigation.setOptions({ title });
   }, [navigation, title]);
 
-  const { data: { seeRoom } = {}, loading } = useSeeRoomQuery({
+  const {
+    data: { seeRoom } = {},
+    loading,
+    refetch,
+  } = useSeeRoomQuery({
     variables: { seeRoomId: roomId },
   });
   const [send, { loading: sendingMessage }] = useSendMessageMutation({
     update: (cache, { data }) => {
       if (!data?.sendMessage.isSuccess) return;
-      const newMessage = {
-        __typename: "Message",
-        id: data.sendMessage.id,
-        text: getValues("message"),
-        user: {
-          id: me?.id,
-          username: me?.username,
-          avatar: me?.avatar,
-          createAt: Date.now(),
-        },
-        read: false,
-      };
-      const ref = cache.writeFragment({
-        fragment: gql`
-          fragment NewMessage on Message {
-            id
-            text
-            user {
-              id
-              username
-              avatar
-              createdAt
-            }
-            read
-          }
-        `,
-        data: newMessage,
-      });
-      cache.modify({
-        id: `Room:${roomId}`,
-        fields: {
-          messages(prev) {
-            return [...prev, ref];
-          },
-        },
-      });
+      refetch();
       setValue("message", "");
     },
   });
@@ -123,7 +89,10 @@ const Room = ({
         <FlatList
           style={{ paddingBottom: bottom }}
           ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-          contentContainerStyle={{ flexGrow: 1, justifyContent: "flex-end" }}
+          contentContainerStyle={{
+            flexGrow: 1,
+            justifyContent: "flex-end",
+          }}
           data={seeRoom?.messages || []}
           renderItem={({ item }) => (
             <MessageContainer isMine={item?.user.username !== title}>
